@@ -1,18 +1,17 @@
-import Group from "../group";
-import { Container } from "react-dom";
-import styled from 'styled-components';
+import Group from "../group/group";
+import NewGroup from "../group/newGroup";
+import { Container } from './styles.js'
 
 function Board() {
 
     return (
-        <view style={{ display: 'flex'}}>
+        <Container>
+           
+           <Group></Group>
             <Group></Group>
-            <Group></Group>
-            <Group></Group>
-            <Group></Group>
-            <Group></Group>
-        </view>
-
+            <NewGroup></NewGroup>
+           
+        </Container>
     );
 }
 

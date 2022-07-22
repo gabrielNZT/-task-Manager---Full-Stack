@@ -1,10 +1,15 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-const style = StyleSheet.create({
-    container: {
-        background: '#1976d2',
-        color: '#FFFFFF',
-        fontSize: '20px',
-        border: '2px solid black'
-    }
-})
+export const Stylebtn = styled.button`
+  background-color: #616161;
+  border-radius: 100%;
+  margin-left: 248px;
+  position: absolute;
+  bottom: 30px;
+  width: 42px;
+  height: 42px;
+`;
+
+export const Container = styled.div`
+height: min-content;
+`

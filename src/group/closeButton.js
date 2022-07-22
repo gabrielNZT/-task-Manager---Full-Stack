@@ -1,7 +1,18 @@
+import React from 'react';
 import CloseButton from 'react-bootstrap/CloseButton';
+import { Stylebtn } from './style.js';
 
 function CloseBTN() {
-  return <CloseButton  style={{marginLeft: 154, fontWeight: '900',}} />;
+
+  return (
+    <>
+      <Stylebtn>
+        <CloseButton variant='white'/>
+      </Stylebtn>
+    </>
+  );
 }
+
+
 
 export default CloseBTN;

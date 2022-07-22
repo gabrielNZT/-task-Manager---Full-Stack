@@ -9,7 +9,9 @@ export default createGlobalStyle`
     
   }
   html, body, #root {
-    height: 100%;
+    height: 99%;
+    width: 99%;
+    margin-left: 8px;
   }
   body {
     font: 14px sans-serif;
