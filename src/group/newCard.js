@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import Task from '../card/index.js'
+
 
 function NewCard(props) {
   const [show, setShow] = useState(false);
@@ -32,6 +32,7 @@ function NewCard(props) {
     
       setInput('');
       setInputDescription('');
+      handleClose();
   }
 
   return (
