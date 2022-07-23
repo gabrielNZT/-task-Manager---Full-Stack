@@ -3,12 +3,28 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
-function NewGroup() {
+function NewGroup(props) {
   const [show, setShow] = useState(false);
+  const [input, setInput] = useState('');
 
   const handleClose = () => {
     setShow(false);
     
+  }
+  const handleOnChange = e => {
+    setInput(e.target.value);
+  }
+
+  const handleOnSubmit = e => {
+       e.preventDefault();
+       
+       props.onSubmit({
+        id: Math.floor(Math.random() * 10000),  
+        header: input
+       });
+       
+       setInput('');
+       handleClose();
   }
   
   const handleShow = () => setShow(true);
@@ -21,25 +37,25 @@ function NewGroup() {
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Novo Grupo</Modal.Title>
+          <Modal.Title>Nome</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Nome</Form.Label>
               <Form.Control
+                onChange={handleOnChange}
                 type="text"
-                placeholder="exemplo: Task 1"
+                name='header'
+                placeholder="exemplo: grupo de tarefas"
+                value={input}
                 autoFocus
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={handleOnSubmit}>
             Save Changes
           </Button>
         </Modal.Footer>
