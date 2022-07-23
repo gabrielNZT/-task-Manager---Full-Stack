@@ -13,6 +13,7 @@ function NewCard(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+
   const handleChange = e => {
     setInput(e.target.value);
   }
@@ -69,7 +70,7 @@ function NewCard(props) {
                onChange={handleDescriptionChange}
                value={inputDescription}
                placeholder='exemplo: Reunião com o DR. Paulo no dia 10/08'
-               autoFocus
+                
                />
             </Form.Group>
           </Form>

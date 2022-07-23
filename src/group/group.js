@@ -8,16 +8,20 @@ import { useState } from 'react';
 import Task from '../card/index.js';
 
 
-function Group() {
+function Group(props) {
+    
+    const {group, onDeleteGroup} = props;
+   
     const [list, setList] = useState([]);
+
 
     const addList = task => {
         if (!task.name || /^\s*$/.test(task.name)) {
-            return;
+            return; 
         }
 
         setList(list => [...list, task]);
-
+        //console.log(list);
     };
 
     const onEdit = item => {
@@ -39,15 +43,14 @@ function Group() {
             <Card border="dark" style={{ width: '18rem', marginTop: 20, marginLeft: 30, }}>
 
                 <Card.Header style={{ background: '#1976d2', color: '#FFFFFF', fontSize: '26px', border: '2px solid black', display: 'flex', position: 'relative', height: 55 }}>
-                    Header
-                    <CloseBTN></CloseBTN>
+                    {group.header}
+                    <CloseBTN onDeleteGroup={onDeleteGroup} group={group}></CloseBTN>
                 </Card.Header>
 
                 <Card.Body id='card-body' style={{ background: '#e7e7e7', fontSize: '20px', display: 'flex', flexDirection: 'column' }}>
 
                     {
                         list.map(item => (<Task key={item.id} item={item} onEdit={onEdit} onDelete={onDelete} />))
-
                     }
 
                     <NewCard onSubmit={addList} ></NewCard>

@@ -46,7 +46,6 @@ function Task(props) {
                 name='name'
                 value={name}
                 placeholder="exemplo: Task 1"
-                autoFocus
               />
             </Form.Group>
             <Form.Group
@@ -59,7 +58,6 @@ function Task(props) {
                 name='description'
                 value={description}
                 placeholder='exemplo: Reunião com o DR. Paulo no dia 10/08'
-                autoFocus
               />
             </Form.Group>
           </Modal.Body>
