@@ -4,7 +4,7 @@ import NewGroup from "../group/newGroup";
 import { Container } from './styles.js'
 
 function Board() {
-    const [panel, setPanel] = useState('');
+   
     const [list, setList] = useState([])
 
     const addGroup = group => {
