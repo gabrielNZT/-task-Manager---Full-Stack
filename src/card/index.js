@@ -45,6 +45,7 @@ function Task(props) {
                 type="text"
                 name='name'
                 value={name}
+                required
                 placeholder="exemplo: Task 1"
               />
             </Form.Group>

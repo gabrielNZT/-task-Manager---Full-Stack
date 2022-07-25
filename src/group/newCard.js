@@ -25,6 +25,7 @@ function NewCard(props) {
   const handleSubmit = e => {
       e.preventDefault();
 
+
       props.onSubmit({
         id: Math.floor(Math.random() * 100000),
         name: input,
@@ -43,11 +44,12 @@ function NewCard(props) {
       </Button>
 
       <Modal show={show} onHide={handleClose}>
+      <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Novo Card</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+          
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Nome</Form.Label>
               <Form.Control 
@@ -56,6 +58,7 @@ function NewCard(props) {
                 value={input}
                 onChange={handleChange}
                 placeholder="exemplo: Task 1"
+                required
                 autoFocus
               />
             </Form.Group>
@@ -73,16 +76,17 @@ function NewCard(props) {
                 
                />
             </Form.Group>
-          </Form>
+          
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button id='buttonNewCard' variant="primary" onClick={handleSubmit}>
+          <Button id='buttonNewCard' variant="primary" type='submit'>
             Save Changes
           </Button>
         </Modal.Footer>
+        </Form>
       </Modal>
     </>
   );
