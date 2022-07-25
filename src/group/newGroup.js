@@ -36,11 +36,12 @@ function NewGroup(props) {
       </Button>
 
       <Modal show={show} onHide={handleClose}>
+      <Form onSubmit={handleOnSubmit}>
         <Modal.Header closeButton>
           <Modal.Title>Nome</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
+
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
               <Form.Label>Nome</Form.Label>
               <Form.Control
@@ -50,15 +51,16 @@ function NewGroup(props) {
                 placeholder="exemplo: grupo de tarefas"
                 value={input}
                 autoFocus
+                required
               />
             </Form.Group>
-          </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleOnSubmit}>
+          <Button variant="primary" type="submit">
             Save Changes
           </Button>
         </Modal.Footer>
+        </Form>
       </Modal>
     </>
   );
