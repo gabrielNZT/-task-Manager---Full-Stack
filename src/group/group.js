@@ -4,7 +4,7 @@ import NewCard from './newCard';
 import CloseBTN from './closeButton';
 import { Container } from './style';
 import Form from 'react-bootstrap/Form'
-import { useEffect, useState } from 'react';
+import { useState} from 'react';
 import Task from '../card/index.js';
 
 
@@ -12,11 +12,7 @@ function Group(props) {
     const { group, onDelete, onChange } = props;
     const [header, setHeader] = useState(group.header);
     const [cards, setCards] = useState(group.cards || []);
-
     
-    useEffect(() => {
-      onChange({header,cards})
-    }, [cards])
     const addCard = task => {
         if (!task.name || /^\s*$/.test(task.name)) {
             return; 
@@ -25,14 +21,16 @@ function Group(props) {
     }
 
     const handleOnChange = e => {
-        setHeader(e.target.value)
+        setHeader(e.target.value);
     }
 
     const handleSubmit = e => {
         e.preventDefault();
-        onChange({header, cards})
-        console.log('submit')
+        var value = document.getElementById(group.id);
+        value.blur();
+        onChange({header, cards});
     }
+
 
     const onEditCard = item => {
         setCards(cards.map(i => {
@@ -43,6 +41,7 @@ function Group(props) {
         }))
     }
 
+
     const onDeleteCard = item => {
         setCards(cards.filter(i => i.id !== item.id))
     }
@@ -51,11 +50,11 @@ function Group(props) {
         <Container>
             <Card border="dark" style={{ width: '18rem', marginTop: 20, marginLeft: 30, }}>
                 
-
                 <Card.Header style={{ background: '#1976d2', color: '#FFFFFF', fontSize: '26px', border: '2px solid black', display: 'flex', position: 'relative', height: 55 }}>  
-                     <Form onSubmit={handleSubmit}>
+                     <Form onSubmit={handleSubmit} >
                         <Form.Label>
-                            <Form.Control style={{background: '#1976d2', border: 'transparent', fontSize: '20px', color: '#FFF'}} 
+                            <Form.Control style={{background: '#1976d2', border: 'transparent', fontSize: '20px', color: '#FFF'}} id={group.id}
+                            
                             onChange={handleOnChange}
                             required
                             type='text'

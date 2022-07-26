@@ -64,10 +64,10 @@ function Task(props) {
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" style={{background: '#FF0000'}} onClick={handleDelete}>
-              Delete
+              Deletar
             </Button>
             <Button id='buttonNewCard' variant="primary" type='submit'>
-              Save Changes
+              Salvar
             </Button>
           </Modal.Footer>
         </Form>

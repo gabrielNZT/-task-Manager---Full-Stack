@@ -9,9 +9,11 @@ export default createGlobalStyle`
     
   }
   html, body, #root {
+    flex-grow: 1;
     height: 99%;
     width: 99%;
     margin-left: 8px;
+    margin-right: 8px;
   }
   body {
     font: 14px sans-serif;

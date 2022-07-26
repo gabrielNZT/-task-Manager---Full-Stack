@@ -12,4 +12,5 @@ export const Stylebtn = styled.button`
 
 export const Container = styled.div`
 height: min-content;
+margin-bottom: 10px;
 `
