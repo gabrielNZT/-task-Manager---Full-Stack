@@ -79,11 +79,8 @@ function NewCard(props) {
           
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
           <Button id='buttonNewCard' variant="primary" type='submit'>
-            Save Changes
+            Salvar
           </Button>
         </Modal.Footer>
         </Form>
