@@ -5,7 +5,7 @@ export const Stylebtn = styled.button`
   border-radius: 100%;
   margin-left: 248px;
   position: absolute;
-  bottom: 30px;
+  bottom: 45px;
   width: 42px;
   height: 42px;
 `;
