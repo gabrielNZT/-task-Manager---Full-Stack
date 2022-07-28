@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import { useDrag, useDrop } from 'react-dnd';
+import { Container } from './style';
+import Context from '../board/context';
 
 function Task(props) {
-  const { item, onEdit, onDelete } = props;
-  
+  const { item, onEdit, onDelete, index, listIndex } = props;
+  const ref = useRef();
   const [name, setName] = useState(item.name || '');
   const [description, setDescription] = useState(item.description || '');
- 
+  const {moveItem} = useContext(Context);
+  
+
   const [show, setShow] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    onEdit({ id: item.id, name, description});
+    onEdit({ id: item.id, name, description });
     handleClose();
   }
 
-  const handleDelete = ()=> {
+  const handleDelete = () => {
     onDelete(item);
     handleClose();
   }
@@ -26,12 +31,52 @@ function Task(props) {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const [{ isDragging }, dragRef] = useDrag({
+    type: 'CARD',
+    item: {index: index},
+    collect: monitor => ({
+      isDragging: monitor.isDragging(),
+    }),
+  });
+
+  const [, dropRef] = useDrop({
+    accept: 'CARD',
+    hover(item, monitor) {
+        const draggedId = item.index;
+        const draggedTarget = index;
+        const draggedIndexList = listIndex;
+
+        if(draggedId === draggedTarget){
+          return;
+        }
+
+        const targetSize = ref.current.getBoundingClientRect();
+        const targetCenter = (targetSize.bottom - targetSize.top) / 2;
+        
+        const draggedOffset = monitor.getClientOffset();
+        const draggedTop = draggedOffset.y - targetSize.top;
+
+        if (draggedId < draggedTarget && draggedTop < targetCenter) {
+          return;
+        }
+
+        if (draggedId > draggedTarget && draggedTop > targetCenter) {
+          return;
+        }
+          
+        moveItem(draggedIndexList ,draggedId, draggedTarget);
+    }
+  })
+   
+  dragRef(dropRef(ref));
+
   return (
 
     <>
-      <Button style={{ border: '2px solid #795244', marginTop: 15, cursor: 'pointer', background: '#FFF', color: 'GrayText', fontSize: '20px', textAlign: 'left', height: '5rem' }} variant="primary" onClick={handleShow}>
-        {item.name}
-      </Button>
+      
+        <Container onClick={handleShow} ref={ref} isDragging={isDragging}>
+          <h1>{item.name}</h1>
+        </Container>
 
       <Modal show={show} onHide={handleClose}>
         <Form onSubmit={handleSubmit}>
@@ -63,7 +108,7 @@ function Task(props) {
             </Form.Group>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" style={{background: '#FF0000'}} onClick={handleDelete}>
+            <Button variant="secondary" style={{ background: '#FF0000' }} onClick={handleDelete}>
               Deletar
             </Button>
             <Button id='buttonNewCard' variant="primary" type='submit'>
