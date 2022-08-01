@@ -1,10 +1,6 @@
 package service.repository;
 
-import service.entitys.Grupo;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import service.model.Grupo;
 
-import java.util.Optional;
-
-public interface GrupoRepository extends CrudRepository <Grupo, Long> {
-   Optional<Grupo> findById(Long id);
-}
+public interface GrupoRepository extends JpaRepository<Grupo, Long> {}
