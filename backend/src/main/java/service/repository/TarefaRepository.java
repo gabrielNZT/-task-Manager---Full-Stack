@@ -1,14 +1,7 @@
 package service.repository;
 
-import service.entitys.Grupo;
-import service.entitys.Tarefa;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import service.model.Tarefa;
 
-import java.util.Iterator;
-import java.util.Optional;
 
-public interface TarefaRepository extends CrudRepository<Tarefa, Long> {
-Iterator <Tarefa> findByGrupo(Grupo grupo);
-
-    Optional<Tarefa> findById(Long id);
-}
+public interface TarefaRepository extends JpaRepository<Tarefa, Long> {}
