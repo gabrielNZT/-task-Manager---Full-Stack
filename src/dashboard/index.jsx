@@ -1,25 +1,28 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useReducer} from "react";
 import GroupList from './groupList';
 import { DeleteGroupModal, EditGroupCardModal, CreateGroupCardModal, CreateGroupModal } from './modal';
 import DragContext from '../contexts/dragContext';
 import { reducer } from './reducer';
 import { Container } from "./styles";
+import api from "../service/api"
 
-
-import default_data from './__mocks__/default_data.json';
 
 
 const Board = () => {
 
     const [state, dispatch] = useReducer(reducer, { groups: [], status: 'idle' });
-
+    
     useEffect(() => {
-        dispatch({ type: 'FETCH_DATA', payload: default_data });
+        api
+        .get("/grupo")
+        .then((response) => dispatch({type: 'FETCH_DATA', payload: response.data}))
+        .catch((err) => {
+            console.log(err);
+        })
     }, []);
 
-
     const moveCardItem = (fromList, toList, from, to) => {
-        dispatch({ type: 'MOVE_ITEM', payload: { fromList, toList, from, to } })
+        dispatch({ type: 'MOVE_ITEM', payload: { fromList, toList, from, to } });
     }
 
     return (

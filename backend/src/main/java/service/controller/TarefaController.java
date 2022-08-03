@@ -12,6 +12,7 @@ import service.repository.TarefaRepository;
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 public class TarefaController {
 
     @Autowired
@@ -22,6 +23,7 @@ public class TarefaController {
     @PostMapping("/grupo/tarefa/{id}")
     public Tarefa newTarefa(@PathVariable Long id, @RequestBody Tarefa tarefa){
         Grupo grupo =  grupoRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+        grupo.getCards().add(tarefa);
         tarefa.setGrupo(grupo);
         tarefaRepository.save(tarefa);
         return tarefa;
@@ -33,14 +35,23 @@ public class TarefaController {
     }
 
     @PutMapping("/grupo/{idGrupo}/tarefa/{id}")
-    public Tarefa updateTarefa(@PathVariable Long id, @PathVariable Long idGrupo, @RequestBody Tarefa tarefa){
+    public Tarefa moveTarefa(@PathVariable Long id, @PathVariable Long idGrupo, @RequestBody Tarefa tarefa){
         Grupo grupo = grupoRepository.findById(idGrupo).orElseThrow(() -> new NotFoundException(id));
+        Tarefa editTarefa = tarefaRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
+
+        editTarefa.setIndex(tarefa.getIndex());
+        editTarefa.setGrupo(grupo);
+
+        return tarefaRepository.save(editTarefa);
+    }
+
+    @PutMapping("/grupo/tarefa/{id}")
+    public Tarefa updateTarefa(@PathVariable Long id, @RequestBody Tarefa tarefa){
 
         tarefaRepository.findById(id).map(updateTarefa -> {
             updateTarefa.setDescription(tarefa.getDescription());
             updateTarefa.setIndex(tarefa.getIndex());
             updateTarefa.setTitle(tarefa.getTitle());
-            updateTarefa.setGrupo(grupo);
             return tarefaRepository.save(updateTarefa);
         });
         return null;

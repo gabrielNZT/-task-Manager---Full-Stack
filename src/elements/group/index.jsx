@@ -10,6 +10,7 @@ import GroupCard from '../groupCard';
 
 import { Container } from './styles';
 import 'bootstrap/dist/css/bootstrap.min.css'
+import api from '../../service/api';
 
 const Group = (props) => {
     const { group: { id, title, cards }, dispatch, group } = props;
@@ -53,6 +54,13 @@ const Group = (props) => {
 
     const handleTitleUpdate = () => {
         if (header !== title) {
+            api
+            .put("/grupo", {
+                id: id,
+                index: group.index,
+                title: header
+            })
+            .then();
             dispatch({ type: 'UPDATE_GROUP_TITLE', payload: { id, title: header } })
         }
     }
@@ -62,6 +70,10 @@ const Group = (props) => {
     }
 
     const handleDelete = () => {
+        api
+        .delete("/grupo/"+group.id)
+        .then()
+
         dispatch({
             type: 'SHOW_MODAL', payload: {
                 modal: 'DELETE_GROUP',
@@ -106,7 +118,7 @@ const Group = (props) => {
                     <DeleteGroupButton onClick={handleDelete} />
                 </Card.Header>
                 <Card.Body id='card-body' style={cardBodyStyle}>
-                    {cards.sort((a, b) => a.order - b.order).map((card) => (<GroupCard key={card.id} card={card} parent={group} dispatch={dispatch} />))}
+                    {cards.sort((a, b) => a.index - b.index).map((card) => (<GroupCard key={card.id} card={card} parent={group} dispatch={dispatch} />))}
                     <AddGroupCardButton onClick={handleClickAdd} />
                 </Card.Body>
             </Card>

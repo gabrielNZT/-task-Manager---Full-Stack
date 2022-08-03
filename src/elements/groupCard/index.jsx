@@ -22,12 +22,12 @@ const GroupCard = (props) => {
             if (!cardRef.current) {
                 return;
             }
-
-            const draggedIndex = item.order;
-            const targetIndex = card.order;
+            
+            const draggedIndex = item.index;
+            const targetIndex = card.index;
 
             const draggedListIndex = item.parentOrder;
-            const targetListIndex = parent.order;
+            const targetListIndex = parent.index;
 
 
             if (draggedIndex === targetIndex && draggedListIndex === targetListIndex) {
@@ -48,15 +48,16 @@ const GroupCard = (props) => {
             }
 
             moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex);
-            item.order = targetIndex;
+            item.index = targetIndex;
             item.parentOrder = targetListIndex;
+            
         }
     })
 
 
     const [{ isDragging }, drag] = useDrag({
         type: 'ITEM',
-        item: { order: card.order, parentOrder: parent.order, parentCardsLength: parent.cards.length },
+        item: { index: card.index, parentOrder: parent.index, parentCardsLength: parent.cards.length },
         collect: monitor => ({
             isDragging: monitor.isDragging(),
         }),

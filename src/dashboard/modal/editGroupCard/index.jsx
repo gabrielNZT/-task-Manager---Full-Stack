@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import api from '../../../service/api';
 
 
 const EditGroupCard = (props) => {
@@ -26,10 +27,20 @@ const ModalContent = React.memo((props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        api
+        .put("/grupo/tarefa/"+state.current.id, {
+            index: state.current.index,
+            title: title,
+            description: description
+        })
+        .then((response)=> console.log(response.data))
         dispatch({ type: 'UPDATE_GROUP_CARD', payload: { title, description } });
     }
 
     const handleDelete = () => {
+        api
+        .delete("/grupo/tarefa/"+state.current.id)
+        .then()
         dispatch({ type: 'DELETE_GROUP_CARD' });
     }
 
