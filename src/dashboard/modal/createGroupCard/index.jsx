@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import api from '../../../service/api';
 
 
 const EditGroupCard = (props) => {
@@ -28,8 +29,17 @@ const ModalContent = React.memo((props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (state.current) {
-            const order = state.current.cards.length;
-            dispatch({ type: 'ADD_GROUP_CARD', payload: { id: Math.floor(Math.random() * 10000), title, description, order } });
+            const index = state.current.cards.length;
+            e.preventDefault();
+
+            api
+            .post("/grupo/tarefa/"+state.current.id, {
+                index: index,
+                title: title,
+                description: description 
+            })
+            .then((response) => dispatch({ type: 'ADD_GROUP_CARD', payload: response.data}))
+            //dispatch({ type: 'ADD_GROUP_CARD', payload: { id: Math.floor(Math.random() * 10000), title, description, order } });
         }
     }
 

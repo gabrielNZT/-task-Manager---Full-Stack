@@ -21,8 +21,8 @@ const CreateGroupCard = (props) => {
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
 
-    const [title, setTitle] = useState(state.current != undefined ? state.current.title : '');
-    const [description, setDescription] = useState(state.current != undefined ? state.current.description : '');
+    const [title, setTitle] = useState(state.current !== undefined ? state.current.title : '');
+    const [description, setDescription] = useState(state.current !== undefined ? state.current.description : '');
 
     const handleSubmit = (e) => {
         e.preventDefault();

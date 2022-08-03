@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import api from '../../../service/api';
 
 
 const CreateGroupCard = (props) => {
@@ -20,20 +21,24 @@ const CreateGroupCard = (props) => {
 
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
-
     const [title, setTitle] = useState('');
 
     const handleSubmit = (e) => {
-        const order = state.groups.length;
+        const index = state.groups.length;
         e.preventDefault();
-        dispatch({ type: 'ADD_GROUP', payload: { id: Math.floor(Math.random() * 10000), title, order, cards: [] } });
+        api
+        .post("/grupo", {
+            title: title,
+            index: index
+        })
+        .then((response) => dispatch({ type: 'ADD_GROUP', payload: response.data}));
+
+        //dispatch({ type: 'ADD_GROUP', payload: { id: Math.floor(Math.random() * 10000), title, order, cards: [] } });
     }
 
     const handleOnChange = e => {
         setTitle(e.target.value);
     }
-
-
 
     return <Form onSubmit={handleSubmit}>
         <Modal.Header closeButton>
@@ -56,7 +61,7 @@ const ModalContent = React.memo((props) => {
         </Modal.Body>
         <Modal.Footer>
             <Button variant="primary" type="submit">
-                Save Changes
+                Salvar
             </Button>
         </Modal.Footer>
     </Form>

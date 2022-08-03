@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import service.model.Grupo;
 import service.repository.GrupoRepository;
-import service.repository.TarefaRepository;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin("*")
 public class GrupoController {
 
     @Autowired

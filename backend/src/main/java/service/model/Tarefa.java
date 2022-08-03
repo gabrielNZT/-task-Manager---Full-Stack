@@ -1,5 +1,7 @@
 package service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,8 +14,8 @@ public class Tarefa {
     private String title;
     private String description;
 
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "grupo_id", referencedColumnName = "id")
     private Grupo grupo = new Grupo();
 

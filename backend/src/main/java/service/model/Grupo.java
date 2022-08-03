@@ -1,6 +1,6 @@
 package service.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public class Grupo {
     private String title;
     private Integer index;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "grupo", orphanRemoval = true)
     private List<Tarefa> cards = new ArrayList<>();
 

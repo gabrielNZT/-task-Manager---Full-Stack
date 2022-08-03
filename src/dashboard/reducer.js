@@ -42,15 +42,14 @@ export const reducer = (state, action) => {
 
         case 'MOVE_ITEM':
             const { from, to, fromList, toList } = action.payload;
-
+            
             const newListState = produce(state.groups, draft => {
 
                 const dragged = draft[fromList].cards[from];
-
+                
                 draft[fromList].cards.splice(from, 1);
                 draft[toList].cards.splice(to, 0, dragged);
             });
-
             return { ...state, groups: reorderGroupsCards(newListState) };
         case 'DELETE_GROUP_CARD':
             if (state.current) {
