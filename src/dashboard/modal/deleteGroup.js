@@ -1,15 +1,19 @@
 import React from 'react';
 import Modal from 'react-bootstrap/Modal';
-
+import api from '../../service/api';
 import Button from 'react-bootstrap/Button';
 
 
 const DeleteGroup = (props) => {
-    const { dispatch, visible } = props;
+    const { dispatch, visible, state } = props;
 
     const onClick = () => {
+        api
+        .delete("/grupo/"+state.current.id)
+        .then()
         dispatch({ type: 'DELETE_GROUP' });
     }
+
     const onClose = () => {
         dispatch({ type: 'HIDE_MODAL' });
     }

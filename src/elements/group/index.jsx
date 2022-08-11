@@ -70,10 +70,6 @@ const Group = (props) => {
     }
 
     const handleDelete = () => {
-        api
-        .delete("/grupo/"+group.id)
-        .then()
-
         dispatch({
             type: 'SHOW_MODAL', payload: {
                 modal: 'DELETE_GROUP',
