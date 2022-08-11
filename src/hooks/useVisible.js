@@ -9,6 +9,4 @@ export default function useVisible() {
     ])
 
     return [visible, toggle]
-
-
 }
