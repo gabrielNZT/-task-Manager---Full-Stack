@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer} from "react";
+import React, { useEffect, useReducer, useState} from "react";
 import GroupList from './groupList';
 import { DeleteGroupModal, EditGroupCardModal, CreateGroupCardModal, CreateGroupModal } from './modal';
 import DragContext from '../contexts/dragContext';
@@ -11,6 +11,11 @@ import api from "../service/api"
 const Board = () => {
 
     const [state, dispatch] = useReducer(reducer, { groups: [], status: 'idle' });
+    const [isChange, setIsChange] = useState(false);
+    const [id, setID] = useState(null);
+    const [title, setTitle] = useState(null);
+    const [index, setIndex] = useState(null);
+    const [indexGroup, setIndexGroup] = useState(null);
     
     useEffect(() => {
         api
@@ -21,7 +26,25 @@ const Board = () => {
         })
     }, []);
 
+    if(isChange === true){
+    
+        api
+        .put("grupo/"+id, {
+            id: id,
+            title: title,
+            index: index,
+            cards: state.groups[indexGroup].cards
+        })
+        .then();
+        setIsChange(false);
+    }
+
     const moveCardItem = (fromList, toList, from, to) => {
+        setIsChange(true);
+        setID(state.groups[toList].id);
+        setIndex(state.groups[toList].index);
+        setTitle(state.groups[toList].title);
+        setIndexGroup(toList);
         dispatch({ type: 'MOVE_ITEM', payload: { fromList, toList, from, to } });
     }
 
