@@ -5,7 +5,7 @@ import GlobalStyle from './styles/global'
 import { DndProvider } from "react-dnd";
 import Dashboard from './dashboard';
 
-import 'bootstrap/dist/css/bootstrap.min.css'
+
 
 
 function App() {

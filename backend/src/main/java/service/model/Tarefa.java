@@ -15,7 +15,7 @@ public class Tarefa {
     private String description;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "grupo_id", referencedColumnName = "id")
     private Grupo grupo = new Grupo();
 

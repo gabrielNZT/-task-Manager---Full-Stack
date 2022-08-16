@@ -17,7 +17,10 @@ const DropWrapper = ({ children, group }) => {
                 const draggedListIndex = item.parentOrder;
                 const targetListIndex = group.index;
 
-                moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex);
+                const groupId = group.id;
+                const cardId = item.cardId
+
+                moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex, groupId, cardId);
             }
 
         },

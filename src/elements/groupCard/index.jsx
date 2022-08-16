@@ -46,8 +46,10 @@ const GroupCard = (props) => {
             if (draggedIndex > targetIndex && hoverClientY < hoverMiddleY) {
                 return;
             }
+            const idGroup = parent.id;
+            const idCard = item.cardId;
 
-            moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex);
+            moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex, idGroup, idCard);
             item.index = targetIndex;
             item.parentOrder = targetListIndex;
             
@@ -57,7 +59,7 @@ const GroupCard = (props) => {
 
     const [{ isDragging }, drag] = useDrag({
         type: 'ITEM',
-        item: { index: card.index, parentOrder: parent.index, parentCardsLength: parent.cards.length },
+        item: { index: card.index, parentOrder: parent.index, parentCardsLength: parent.cards.length, cardId: card.id },
         collect: monitor => ({
             isDragging: monitor.isDragging(),
         }),
