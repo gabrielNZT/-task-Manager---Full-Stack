@@ -15,8 +15,11 @@ const Board = () => {
     const [id, setID] = useState(null);
     const [title, setTitle] = useState(null);
     const [index, setIndex] = useState(null);
-    const [indexGroup, setIndexGroup] = useState(null);
-    
+    const [indexGroupToList, setIndexGroupToList] = useState(null);
+    const [indexGroupFromList, setIndexGroupFromList] = useState(null);
+    const [idfromList, setIdFromList] = useState(null);
+
+    console.log(state);
     useEffect(() => {
         api
         .get("/grupo")
@@ -27,13 +30,21 @@ const Board = () => {
     }, []);
 
     if(isChange === true){
+        api
+        .put("grupo/"+idfromList, {
+            id: idfromList,
+            title: state.groups[indexGroupFromList].title,
+            index: state.groups[indexGroupFromList].index,
+            cards: state.groups[indexGroupFromList].cards
+        })
+        .then();
     
         api
         .put("grupo/"+id, {
             id: id,
             title: title,
             index: index,
-            cards: state.groups[indexGroup].cards
+            cards: state.groups[indexGroupToList].cards
         })
         .then();
         setIsChange(false);
@@ -44,7 +55,9 @@ const Board = () => {
         setID(state.groups[toList].id);
         setIndex(state.groups[toList].index);
         setTitle(state.groups[toList].title);
-        setIndexGroup(toList);
+        setIndexGroupToList(toList);
+        setIdFromList(state.groups[fromList].id);
+        setIndexGroupFromList(fromList);
         dispatch({ type: 'MOVE_ITEM', payload: { fromList, toList, from, to } });
     }
 
