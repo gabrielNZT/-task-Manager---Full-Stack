@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import api from '../../../service/api';
 
-
 const EditGroupCard = (props) => {
     const { dispatch, visible } = props;
 
@@ -40,8 +39,7 @@ const ModalContent = React.memo((props) => {
     const handleDelete = () => {
         api
         .delete("/tarefa/"+state.current.id)
-        .then()
-        dispatch({ type: 'DELETE_GROUP_CARD' });
+        .then(dispatch({type: 'DELETE_GROUP_CARD'}))
     }
 
 

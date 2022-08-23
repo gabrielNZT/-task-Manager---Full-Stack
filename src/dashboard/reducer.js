@@ -1,5 +1,5 @@
 import { produce } from "immer";
-import { reorderGroupsCards } from './utils'
+import { reorderGroupsCards, findGroup } from './utils'
 
 export const reducer = (state, action) => {
     switch (action.type) {
@@ -9,17 +9,9 @@ export const reducer = (state, action) => {
             return { ...state, groups: state.groups.map(group => group.id === action.payload.id ? { ...group, title: action.payload.title } : group) };
         case 'DELETE_GROUP':
             if (state.current) {
-                var arrayIndex = []
                 const newList = state.groups.filter(group => group.id !== state.current.id)
-                newList.map(group => arrayIndex.push(group.index))
-                console.log(arrayIndex)
                 return {
-                    ...state, groups: newList.map(group => {
-                        return {
-                            ...group,
-                            index: arrayIndex.indexOf(group.index)
-                        }
-                    }), modal: undefined, current: undefined
+                    ...state, groups: newList.map(group => group.index > state.current.index ? {...group, index: (group.index - 1)} : group), modal: undefined, current: undefined
                 }
                 
             } else {
@@ -65,14 +57,20 @@ export const reducer = (state, action) => {
             return { ...state, groups: reorderGroupsCards(newListState)};
         case 'DELETE_GROUP_CARD':
             if (state.current) {
-                return {
-                    ...state, groups: state.groups.map(group => {
-                        return {
-                            ...group,
-                            cards: group.cards.filter(groupCard => groupCard.id !== state.current.id)
-                        }
-                    }), modal: undefined, current: undefined
-                };
+                var currentGroup = findGroup(state.groups, state.current.id);
+                var cardList = currentGroup.cards.map(card => card.index > state.current.index ? {...card, index: (card.index - 1)} : card)
+                var newList = state.groups;
+                
+                newList = newList.map(group => group.id === currentGroup.id ? {...group, cards: cardList} : group)
+                newList = newList.map(group => {
+                    return{
+                        ...group,
+                        cards: group.cards.filter(groupCard => groupCard.id !== state.current.id)
+                    }
+                })
+                          
+                return {...state, groups: newList, modal: undefined, current: undefined}
+
             } else {
                 return state;
             }
