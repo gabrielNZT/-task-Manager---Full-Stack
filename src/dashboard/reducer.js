@@ -9,7 +9,19 @@ export const reducer = (state, action) => {
             return { ...state, groups: state.groups.map(group => group.id === action.payload.id ? { ...group, title: action.payload.title } : group) };
         case 'DELETE_GROUP':
             if (state.current) {
-                return { ...state, groups: state.groups.filter(group => group.id !== state.current.id), modal: undefined, current: undefined };
+                var arrayIndex = []
+                const newList = state.groups.filter(group => group.id !== state.current.id)
+                newList.map(group => arrayIndex.push(group.index))
+                console.log(arrayIndex)
+                return {
+                    ...state, groups: newList.map(group => {
+                        return {
+                            ...group,
+                            index: arrayIndex.indexOf(group.index)
+                        }
+                    }), modal: undefined, current: undefined
+                }
+                
             } else {
                 return state;
             }
@@ -50,7 +62,7 @@ export const reducer = (state, action) => {
                 draft[fromList].cards.splice(from, 1);
                 draft[toList].cards.splice(to, 0, dragged);
             });
-            return { ...state, groups: reorderGroupsCards(newListState) };
+            return { ...state, groups: reorderGroupsCards(newListState)};
         case 'DELETE_GROUP_CARD':
             if (state.current) {
                 return {

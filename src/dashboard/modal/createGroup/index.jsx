@@ -27,9 +27,10 @@ const ModalContent = React.memo((props) => {
         const index = state.groups.length;
         e.preventDefault();
         api
-        .post("/grupo", {
+        .post("/grupo/", {
             title: title,
-            index: index
+            index: index,
+            cards: []
         })
         .then((response) => dispatch({ type: 'ADD_GROUP', payload: response.data}));
 
