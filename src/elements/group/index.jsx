@@ -55,8 +55,7 @@ const Group = (props) => {
     const handleTitleUpdate = () => {
         if (header !== title) {
             api
-            .put("/grupo", {
-                id: id,
+            .put("/grupo/"+id, {
                 index: group.index,
                 title: header
             })

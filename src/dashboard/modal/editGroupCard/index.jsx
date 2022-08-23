@@ -28,7 +28,7 @@ const ModalContent = React.memo((props) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         api
-        .put("/grupo/tarefa/"+state.current.id, {
+        .put("/tarefa/"+state.current.id, {
             index: state.current.index,
             title: title,
             description: description
@@ -39,7 +39,7 @@ const ModalContent = React.memo((props) => {
 
     const handleDelete = () => {
         api
-        .delete("/grupo/tarefa/"+state.current.id)
+        .delete("/tarefa/"+state.current.id)
         .then()
         dispatch({ type: 'DELETE_GROUP_CARD' });
     }

@@ -33,10 +33,11 @@ const ModalContent = React.memo((props) => {
             e.preventDefault();
 
             api
-            .post("/grupo/tarefa/"+state.current.id, {
+            .post("/tarefa/", {
                 index: index,
                 title: title,
-                description: description 
+                description: description,
+                grupo: state.current.id
             })
             .then((response) => dispatch({ type: 'ADD_GROUP_CARD', payload: response.data}))
             //dispatch({ type: 'ADD_GROUP_CARD', payload: { id: Math.floor(Math.random() * 10000), title, description, order } });

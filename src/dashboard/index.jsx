@@ -12,14 +12,12 @@ const Board = () => {
 
     const [state, dispatch] = useReducer(reducer, { groups: [], status: 'idle' });
     const [isChange, setIsChange] = useState(false);
-    const [id, setID] = useState(null);
-    const [title, setTitle] = useState(null);
-    const [index, setIndex] = useState(null);
-    const [indexGroup, setIndexGroup] = useState(null);
-    
+    const [indexToGroup, setIndexToGroup] = useState(null);
+    const [indexFromGroup, setIndexFromGroup] = useState(null);
+
     useEffect(() => {
         api
-        .get("/grupo")
+        .get("/grupo/")
         .then((response) => dispatch({type: 'FETCH_DATA', payload: response.data}))
         .catch((err) => {
             console.log(err);
@@ -27,24 +25,27 @@ const Board = () => {
     }, []);
 
     if(isChange === true){
-    
         api
-        .put("grupo/"+id, {
-            id: id,
-            title: title,
-            index: index,
-            cards: state.groups[indexGroup].cards
+        .put("/grupo/"+state.groups[indexToGroup].id, {
+            title: state.groups[indexToGroup].title,
+            index: state.groups[indexToGroup].index,
+            cards: state.groups[indexToGroup].cards
         })
-        .then();
+
+        api
+        .put("/grupo/"+state.groups[indexFromGroup].id, {
+            title: state.groups[indexFromGroup].title,
+            index: state.groups[indexFromGroup].index,
+            cards: state.groups[indexFromGroup].cards
+        })
+        .then()
         setIsChange(false);
     }
 
     const moveCardItem = (fromList, toList, from, to) => {
         setIsChange(true);
-        setID(state.groups[toList].id);
-        setIndex(state.groups[toList].index);
-        setTitle(state.groups[toList].title);
-        setIndexGroup(toList);
+        setIndexToGroup(toList);
+        setIndexFromGroup(fromList);
         dispatch({ type: 'MOVE_ITEM', payload: { fromList, toList, from, to } });
     }
 
