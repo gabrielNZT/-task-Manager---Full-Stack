@@ -1,12 +1,8 @@
 import React from "react";
 import { HTML5Backend } from "react-dnd-html5-backend";
-
-import GlobalStyle from './styles/global'
+import GlobalStyle from '../styles/global'
 import { DndProvider } from "react-dnd";
-import Dashboard from './dashboard';
-
-
-
+import Dashboard from '../dashboard';
 
 function App() {
   return (
@@ -14,8 +10,6 @@ function App() {
       <GlobalStyle />
       <Dashboard />
     </DndProvider>
-
   );
 }
-
 export default App;
