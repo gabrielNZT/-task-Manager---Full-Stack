@@ -14,7 +14,7 @@ const Board = () => {
     const [isChange, setIsChange] = useState(false);
     const [indexToGroup, setIndexToGroup] = useState(null);
     const [indexFromGroup, setIndexFromGroup] = useState(null);
-    //console.log(state.groups[0])
+
     useEffect(() => {
         api
         .get("/grupo/")
