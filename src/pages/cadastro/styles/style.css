@@ -1,0 +1,35 @@
+.title{
+    font-family: sans-serif;
+    font-size: 40px;
+    color: white;
+    margin-top: 10px;
+    margin-left: 28%;
+  }
+
+.form-switch{
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.mb-3{
+    font-size: 16px;
+}
+
+.login-link{
+  font-size: 18px;
+  color: #6a7dfe;
+  line-height: 1.5;
+  text-decoration: none;
+  margin-left: 25%;
+  margin-top: 2%;
+}
+
+.form-register {
+    width: 500px;
+    height: fit-content;
+    margin-bottom: 5%;
+    margin-top: 5%;
+    margin-left: 15px;
+    background: #343334;
+    border-radius: 5%;
+  }     
