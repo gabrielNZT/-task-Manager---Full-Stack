@@ -1,83 +1,86 @@
-import { Button, Form, Input, InputNumber } from 'antd';
-import React from 'react';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import '../styles/style.css';
+import { useRef, useState } from 'react';
+import { message } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-/* eslint-disable no-template-curly-in-string */
+function FormRegister() {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [again, setAgain] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
+  const buttonRef = useRef(null);
+  const switchRef = useState(null);
+  
+  let navigate = useNavigate();
 
-const validateMessages = {
-  required: '${label} is required!',
-  types: {
-    email: '${label} is not a valid email!',
-    number: '${label} is not a valid number!',
-  },
-  number: {
-    range: '${label} must be between ${min} and ${max}',
-  },
-};
-/* eslint-enable no-template-curly-in-string */
-
-const FormRegister = () => {
-  const onFinish = (values) => {
-    console.log(values);
-  };
+  const handleSubmit = (e) => {
+    console.log(isAdmin)
+    e.preventDefault();
+    if (switchRef.current.checked) {
+      setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
+    }
+    if (again !== password) {
+      message.error("a confirmação da senha não corresponde")
+      setPassword('');
+      setAgain('');
+    } else {
+      buttonRef.current.focus();
+      navigate("/dashboard", {replace: false})
+    }
+  }
 
   return (
-    <Form {...layout} name="nest-messages" onFinish={onFinish} validateMessages={validateMessages}>
-      <Form.Item
-        name={['user', 'name']}
-        label="Name"
-        rules={[
-          {
-            required: true,
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={['user', 'email']}
-        label="Email"
-        rules={[
-          {
-            type: 'email',
-          },
-        ]}
-      >
-        <Input />
-      </Form.Item>
-      <Form.Item
-        name={['user', 'age']}
-        label="Age"
-        rules={[
-          {
-            type: 'number',
-            min: 0,
-            max: 99,
-          },
-        ]}
-      >
-        <InputNumber />
-      </Form.Item>
-      <Form.Item name={['user', 'website']} label="Website">
-        <Input />
-      </Form.Item>
-      <Form.Item name={['user', 'introduction']} label="Introduction">
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
+    <Form className='form-register' onSubmit={handleSubmit}>
+      <hi className='title'>CADASTRO</hi>
+      <Form.Group className="mb-3" controlId="formBasicName">
+        <Form.Label>Nome Completo</Form.Label>
+        <Form.Control onChange={event => setName(event.target.value)}
+          type="text"
+          value={name}
+          placeholder="francisco chiquinho silva"
+          required
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Form.Label>Email</Form.Label>
+        <Form.Control onChange={event => setEmail(event.target.value)}
+          type="email"
+          placeholder="franciscodasilva@gmail.com"
+          value={email}
+          required
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formBasicPassword">
+        <Form.Label>Senha</Form.Label>
+        <Form.Control onChange={event => setPassword(event.target.value)}
+          value={password}
+          type="password"
+          placeholder="Password"
+          required
+        />
+      </Form.Group>
+      <Form.Group className="mb-3" controlId="formBasicTryPassword">
+        <Form.Label>Confirme a senha</Form.Label>
+        <Form.Control onChange={event => setAgain(event.target.value)}
+          value={again}
+          type="password"
+          placeholder="Password"
+          required
+        />
+      </Form.Group>
+      <Form.Group className="form-switch" controlId="formBasicCheckbox" style={{display: 'flex'}}>
+        <Form.Check ref={switchRef} type="switch" label="Administrador" />
+        <a href='/' className='login-link'>Ir para tela de Login</a>
+      </Form.Group>
+      <Button ref={buttonRef} variant="primary" type="submit">
+        Cadastrar
+      </Button>
     </Form>
-  );
-};
-
+  )
+}
 export default FormRegister;

@@ -4,7 +4,7 @@ import GlobalStyle from '../styles/global'
 import { DndProvider } from "react-dnd";
 import Dashboard from '../dashboard';
 
-function App() {
+function TaskManager() {
   return (
     <DndProvider backend={HTML5Backend}>
       <GlobalStyle />
@@ -12,4 +12,4 @@ function App() {
     </DndProvider>
   );
 }
-export default App;
+export default TaskManager;

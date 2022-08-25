@@ -1,6 +1,6 @@
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import "../style/style.css"
+import "../styles/style.css"
 import { useRef, useState } from 'react'
 
 function LoginForm() {
@@ -19,8 +19,8 @@ function LoginForm() {
 
     
     return (
-        <Form className='forms' onSubmit={handleSubmit}>
-            <h1 className='title'>LOGIN</h1>
+        <Form className='form-login' onSubmit={handleSubmit}>
+            <h1 className='title-login'>LOGIN</h1>
             <Form.Group className="mb-3" controlId="formBasicEmail">
                 <Form.Label>Usuário</Form.Label>
                 <Form.Control 
@@ -48,7 +48,7 @@ function LoginForm() {
             </Button>
             <div>
                 <h2>Não possui conta ainda?</h2>
-                <a href='#' className='register'>Criar Conta</a>
+                <a href='/cadastro' className='register'>Criar Conta</a>
             </div>
         </Form>
     )
