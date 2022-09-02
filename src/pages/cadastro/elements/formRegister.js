@@ -4,34 +4,47 @@ import '../styles/style.css';
 import { useRef, useState } from 'react';
 import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import api from '../../../service/api';
 
 function FormRegister() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [again, setAgain] = useState('');
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [role, setRole] = useState('');
   const buttonRef = useRef(null);
   const switchRef = useState(null);
   
   let navigate = useNavigate();
 
   const handleSubmit = (e) => {
-    console.log(isAdmin)
     e.preventDefault();
-    if (switchRef.current.checked) {
-      setIsAdmin(true);
-    } else {
-      setIsAdmin(false);
-    }
+
     if (again !== password) {
       message.error("a confirmação da senha não corresponde")
       setPassword('');
       setAgain('');
+      
     } else {
+      if (switchRef.current.checked) {
+        setRole('ROLE_ADMIN');
+      } else {
+        setRole("ROLE_USER");
+      }
+    
       buttonRef.current.focus();
-      navigate("/dashboard", {replace: false})
     }
+
+
+    console.log(name, email, password, role)
+
+
+    /* api
+    .post("/api/user", {
+      usernmame: usernmame,
+      email: email,
+      password
+    }) */
   }
 
   return (
@@ -74,7 +87,7 @@ function FormRegister() {
         />
       </Form.Group>
       <Form.Group className="form-switch" controlId="formBasicCheckbox" style={{display: 'flex'}}>
-        <Form.Check ref={switchRef} type="switch" label="Administrador" />
+        <Form.Check ref={switchRef} value={role} type="switch" label="Administrador" />
         <a href='/' className='login-link'>Ir para tela de Login</a>
       </Form.Group>
       <Button ref={buttonRef} variant="primary" type="submit">

@@ -5,6 +5,7 @@ import DragContext from '../contexts/dragContext';
 import { reducer } from './reducer';
 import { Container } from "./styles";
 import api from "../service/api"
+import headers from '../service/security/header'
 
 
 
@@ -16,29 +17,48 @@ const Board = () => {
     const [indexFromGroup, setIndexFromGroup] = useState(null);
 
     useEffect(() => {
+        const setCurrentUser = (response) => {
+            localStorage.setItem('auth', JSON.stringify(() => {
+                return {
+                    ...JSON.parse(localStorage.getItem('auth').data),
+                    email: response.data.email,
+                    id: response.data.id
+                }
+            }))
+        }
+
         api
-        .get("/grupo/")
+        .get("/api/grupo", {headers})
         .then((response) => dispatch({type: 'FETCH_DATA', payload: response.data}))
         .catch((err) => {
             console.log(err);
+        });
+
+        api
+        .get("/api/currentUser", {headers})
+        .then((response) => setCurrentUser(response))
+        .catch(function (error) {
+            console.log(error)
         })
     }, []);
 
     if(isChange === true){
         api
-        .put("/grupo/"+state.groups[indexToGroup].id, {
-            title: state.groups[indexToGroup].title,
-            index: state.groups[indexToGroup].index,
+        .put("/api/grupo/"+state.groups[indexToGroup].id, {
+            header: state.groups[indexToGroup].title,
+            position: state.groups[indexToGroup].index,
             cards: state.groups[indexToGroup].cards
-        })
+        }, {headers})
+        .then();
 
         api
-        .put("/grupo/"+state.groups[indexFromGroup].id, {
-            title: state.groups[indexFromGroup].title,
-            index: state.groups[indexFromGroup].index,
+        .put("/api/grupo/"+state.groups[indexFromGroup].id, {
+            header: state.groups[indexFromGroup].title,
+            position: state.groups[indexFromGroup].index,
             cards: state.groups[indexFromGroup].cards
-        })
-        .then()
+        }, {headers})
+        .then();
+        
         setIsChange(false);
     }
 

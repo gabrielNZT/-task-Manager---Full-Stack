@@ -14,5 +14,5 @@ export default function PagesRoutes() {
                 <Route element={<TaskManager/>} path={"/dashboard"}/>
             </Routes>
         </Router>
-    );
+    ); 
 }

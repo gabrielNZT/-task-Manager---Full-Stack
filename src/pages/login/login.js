@@ -1,4 +1,4 @@
-import LoginForm from "./elements/loginForm.js"
+import LoginForm from "./elements/loginForm.jsx"
 import { Container } from "./elements/loginBackGround.js"
 
 function Login() {

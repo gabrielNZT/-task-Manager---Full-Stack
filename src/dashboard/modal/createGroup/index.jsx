@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import api from '../../../service/api';
+import headers from '../../../service/security/header.js'
 
 
 const CreateGroupCard = (props) => {
@@ -27,11 +28,11 @@ const ModalContent = React.memo((props) => {
         const index = state.groups.length;
         e.preventDefault();
         api
-        .post("/grupo/", {
-            title: title,
-            index: index,
+        .post("/api/grupo", {
+            header: title,
+            position: index,
             cards: []
-        })
+        }, {headers})
         .then((response) => dispatch({ type: 'ADD_GROUP', payload: response.data}));
 
         //dispatch({ type: 'ADD_GROUP', payload: { id: Math.floor(Math.random() * 10000), title, order, cards: [] } });
