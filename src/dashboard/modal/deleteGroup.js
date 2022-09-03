@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import api from '../../service/api';
 import Button from 'react-bootstrap/Button';
+import headers from '../../service/security/header.js'
 
 
 const DeleteGroup = (props) => {
@@ -9,7 +10,7 @@ const DeleteGroup = (props) => {
 
     const onClick = () => {
         api
-        .delete("/grupo/"+state.current.id)
+        .delete("/api/grupo/"+state.current.id, {headers})
         .then()
         dispatch({ type: 'DELETE_GROUP' });
     }
