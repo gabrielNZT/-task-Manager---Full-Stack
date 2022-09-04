@@ -2,15 +2,14 @@ import React from 'react';
 import Modal from 'react-bootstrap/Modal';
 import api from '../../service/api';
 import Button from 'react-bootstrap/Button';
-import headers from '../../service/security/header.js'
-
+import headers from '../../service/security/header.js';
 
 const DeleteGroup = (props) => {
     const { dispatch, visible, state } = props;
 
     const onClick = () => {
         api
-        .delete("/api/grupo/"+state.current.id, {headers})
+        .delete("/api/grupo/"+state.current.id, {headers: headers()})
         .then()
         dispatch({ type: 'DELETE_GROUP' });
     }

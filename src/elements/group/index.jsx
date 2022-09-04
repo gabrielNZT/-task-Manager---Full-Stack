@@ -11,7 +11,7 @@ import GroupCard from '../groupCard';
 import { Container } from './styles';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import api from '../../service/api';
-import headers from '../../service/security/header.js'
+import headers from '../../service/security/header.js';
 
 const Group = (props) => {
     const { group: { id, title, cards }, dispatch, group } = props;
@@ -59,7 +59,7 @@ const Group = (props) => {
             .put("/api/grupo/"+id, {
                 position: group.index,
                 header: header
-            }, {headers})
+            }, {headers: headers()})
             .then();
             dispatch({ type: 'UPDATE_GROUP_TITLE', payload: { id, title: header } })
         }

@@ -3,7 +3,6 @@ import Button from 'react-bootstrap/Button';
 import '../styles/style.css';
 import { useRef, useState } from 'react';
 import { message } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import api from '../../../service/api';
 
 function FormRegister() {
@@ -11,11 +10,10 @@ function FormRegister() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [again, setAgain] = useState('');
-  const [role, setRole] = useState('');
+  const [isAdmin, setIsAdmin] = useState('');
   const buttonRef = useRef(null);
   const switchRef = useState(null);
   
-  let navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,24 +25,38 @@ function FormRegister() {
       
     } else {
       if (switchRef.current.checked) {
-        setRole('ROLE_ADMIN');
+        setIsAdmin(true);
       } else {
-        setRole("ROLE_USER");
+        setIsAdmin(false);
       }
     
       buttonRef.current.focus();
     }
 
-
-    console.log(name, email, password, role)
-
-
-    /* api
+    api
     .post("/api/user", {
-      usernmame: usernmame,
+      username: name,
       email: email,
-      password
-    }) */
+      password: password,
+      adm: isAdmin,
+      enabled: true,
+      accountExpired: false,
+      accountLocked: false,
+      passwordExpired: false
+    })
+    .then(response => {
+      if(response.status === 201){
+        message.success("Conta Criada com sucesso")
+      }
+      else if(response.status === 409){
+        message.error("Conta já em uso")
+      } else {
+        message.error(response.message)
+      }
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
   }
 
   return (
@@ -87,7 +99,7 @@ function FormRegister() {
         />
       </Form.Group>
       <Form.Group className="form-switch" controlId="formBasicCheckbox" style={{display: 'flex'}}>
-        <Form.Check ref={switchRef} value={role} type="switch" label="Administrador" />
+        <Form.Check ref={switchRef} value={isAdmin} type="switch" label="Administrador" />
         <a href='/' className='login-link'>Ir para tela de Login</a>
       </Form.Group>
       <Button ref={buttonRef} variant="primary" type="submit">
