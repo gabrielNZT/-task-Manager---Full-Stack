@@ -6,8 +6,7 @@ import { reducer } from './reducer';
 import { Container } from "./styles";
 import api from "../service/api"
 import headers from '../service/security/header'
-
-
+import { currentUser } from "../service/security/auth.js";
 
 const Board = () => {
 
@@ -17,38 +16,24 @@ const Board = () => {
     const [indexFromGroup, setIndexFromGroup] = useState(null);
 
     useEffect(() => {
-        const setCurrentUser = (response) => {
-            localStorage.setItem('auth', JSON.stringify(() => {
-                return {
-                    ...JSON.parse(localStorage.getItem('auth').data),
-                    email: response.data.email,
-                    id: response.data.id
-                }
-            }))
-        }
-
         api
-        .get("/api/grupo", {headers})
+        .get("/api/grupo", {headers: headers()})
         .then((response) => dispatch({type: 'FETCH_DATA', payload: response.data}))
         .catch((err) => {
             console.log(err);
         });
-
-        api
-        .get("/api/currentUser", {headers})
-        .then((response) => setCurrentUser(response))
-        .catch(function (error) {
-            console.log(error)
-        })
+        
+        currentUser();
     }, []);
 
     if(isChange === true){
-        api
+        
+         api
         .put("/api/grupo/"+state.groups[indexToGroup].id, {
             header: state.groups[indexToGroup].title,
             position: state.groups[indexToGroup].index,
             cards: state.groups[indexToGroup].cards
-        }, {headers})
+        }, {headers: headers()})
         .then();
 
         api
@@ -56,8 +41,8 @@ const Board = () => {
             header: state.groups[indexFromGroup].title,
             position: state.groups[indexFromGroup].index,
             cards: state.groups[indexFromGroup].cards
-        }, {headers})
-        .then();
+        }, {headers: headers()})
+        .then(); 
         
         setIsChange(false);
     }

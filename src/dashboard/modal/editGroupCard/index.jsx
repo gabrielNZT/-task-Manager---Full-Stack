@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import api from '../../../service/api';
-import headers from '../../../service/security/header.js'
+import headers from '../../../service/security/header.js';
 
 const EditGroupCard = (props) => {
     const { dispatch, visible } = props;
@@ -31,15 +31,16 @@ const ModalContent = React.memo((props) => {
         .put("/api/tarefa/"+state.current.id, {
             position: state.current.index,
             header: title,
-            description: description
-        }, {headers})
+            description: description,
+            user: JSON.parse(localStorage.getItem('user')).id
+        }, {headers: headers()})
         .then((response)=> console.log(response.data))
         dispatch({ type: 'UPDATE_GROUP_CARD', payload: { title, description } });
     }
 
     const handleDelete = () => {
         api
-        .delete("/api/tarefa/"+state.current.id, {headers})
+        .delete("/api/tarefa/"+state.current.id, {headers: headers()})
         .then(dispatch({type: 'DELETE_GROUP_CARD'}))
     }
 

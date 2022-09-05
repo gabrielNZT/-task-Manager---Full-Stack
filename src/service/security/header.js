@@ -1,6 +1,13 @@
 const header = {
-    "Content-Type":"application/json",
-    "Accept":"application/json",
-    "Authorization": `Bearer ${JSON.parse(localStorage.getItem('auth')).data.access_token}`
+        "Content-Type": "application/json",
+        "Accept": "application/json"
 }
-export default header
+
+function headers() {
+        return{
+                ...header,
+                Authorization:  `Bearer ${JSON.parse(localStorage.getItem('auth')).data.access_token}`
+        }
+}
+
+export default headers

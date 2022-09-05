@@ -3,8 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import api from '../../../service/api';
-import headers from '../../../service/security/header.js'
-
+import headers from '../../../service/security/header.js';
 
 const EditGroupCard = (props) => {
     const { dispatch, visible } = props;
@@ -38,8 +37,9 @@ const ModalContent = React.memo((props) => {
                 position: index,
                 header: title,
                 description: description,
-                grupo: state.current.id
-            }, {headers})
+                grupo: state.current.id,
+                user: JSON.parse(localStorage.getItem('user')).id
+            }, {headers: headers()})
             .then((response) => dispatch({ type: 'ADD_GROUP_CARD', payload: response.data}))
             //dispatch({ type: 'ADD_GROUP_CARD', payload: { id: Math.floor(Math.random() * 10000), title, description, order } });
         }

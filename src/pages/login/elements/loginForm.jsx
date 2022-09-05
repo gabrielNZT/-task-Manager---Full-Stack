@@ -17,10 +17,10 @@ function LoginForm() {
     let navigate = useNavigate();
 
     useEffect(() => {
-        localStorage.removeItem('auth')
+        localStorage.clear()
     }, []);
 
-    async function handleSubmit ( event ) {
+    function handleSubmit ( event ) {
         event.preventDefault();
 
         var user = {
