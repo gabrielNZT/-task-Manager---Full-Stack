@@ -6,13 +6,13 @@ export const Container = styled.div`
       border: 2px solid #795244;
       background-color: white;
       cursor: grab;
-      
-      
+
+
 
       & + div {
         margin-top: 15px;
       }
-   
+      
       h1 {
         margin-top: 10%;
         margin-bottom: 10%;

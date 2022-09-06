@@ -1,6 +1,8 @@
 .Dropdown-button{
+    justify-content: right;
+    right: 3%;
     margin-top: 1%;
-    justify-content: right; 
+    position: absolute;
 }
 
 .div-dropdown{

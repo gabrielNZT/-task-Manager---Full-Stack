@@ -64,7 +64,7 @@ function LoginForm() {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formBasicPassword">
-                <Form.Label>senha</Form.Label>
+                <Form.Label>Senha</Form.Label>
                 <Form.Control
                     onChange={event => setPassword(event.target.value)}
                     value={password}

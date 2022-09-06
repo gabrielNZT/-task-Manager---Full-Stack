@@ -27,6 +27,8 @@ const Board = () => {
     }, []);
 
     if(isChange === true){
+
+        console.log(state.groups[indexToGroup])
         
          api
         .put("/api/grupo/"+state.groups[indexToGroup].id, {
@@ -36,6 +38,7 @@ const Board = () => {
         }, {headers: headers()})
         .then();
 
+        console.log(state.groups[indexFromGroup])
         api
         .put("/api/grupo/"+state.groups[indexFromGroup].id, {
             header: state.groups[indexFromGroup].title,

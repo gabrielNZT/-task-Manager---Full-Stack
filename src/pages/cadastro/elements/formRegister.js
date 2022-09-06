@@ -10,10 +10,10 @@ function FormRegister() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [again, setAgain] = useState('');
-  const [isAdmin, setIsAdmin] = useState('');
   const buttonRef = useRef(null);
   const switchRef = useState(null);
   
+   
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,21 +24,12 @@ function FormRegister() {
       setAgain('');
       
     } else {
-      if (switchRef.current.checked) {
-        setIsAdmin(true);
-      } else {
-        setIsAdmin(false);
-      }
-    
-      buttonRef.current.focus();
-    }
-
-    api
+      api
     .post("/api/user", {
       username: name,
       email: email,
       password: password,
-      adm: isAdmin,
+      adm: switchRef.current.checked,
       enabled: true,
       accountExpired: false,
       accountLocked: false,
@@ -56,7 +47,9 @@ function FormRegister() {
     })
     .catch(function (error) {
       console.log(error)
-    })
+    });
+      buttonRef.current.focus();
+    }
   }
 
   return (
@@ -99,7 +92,7 @@ function FormRegister() {
         />
       </Form.Group>
       <Form.Group className="form-switch" controlId="formBasicCheckbox" style={{display: 'flex'}}>
-        <Form.Check ref={switchRef} value={isAdmin} type="switch" label="Administrador" />
+        <Form.Check ref={switchRef} type="switch" label="Administrador" />
         <a href='/' className='login-link'>Ir para tela de Login</a>
       </Form.Group>
       <Button ref={buttonRef} variant="primary" type="submit">

@@ -1,0 +1,19 @@
+.div-header{
+    background: #020E4D;
+    border: 2px solid black;
+    height: 12%;
+    display: flex;
+}
+
+.div-logo{
+    margin-top: 1%;
+    padding: 0 30px;
+    width: max-content;
+    height: fit-content;
+}
+
+.title-logo{
+    color: azure;   
+    display: inline;
+    font: 40px sans-serif;
+}

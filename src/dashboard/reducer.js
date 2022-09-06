@@ -54,6 +54,7 @@ export const reducer = (state, action) => {
                 draft[fromList].cards.splice(from, 1);
                 draft[toList].cards.splice(to, 0, dragged);
             });
+            console.log(newListState)
             return { ...state, groups: reorderGroupsCards(newListState)};
         case 'DELETE_GROUP_CARD':
             if (state.current) {

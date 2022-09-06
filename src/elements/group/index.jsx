@@ -23,7 +23,7 @@ const Group = (props) => {
 
     const cardStyle = {
         width: '18rem',
-        marginTop: 20,
+        marginTop: 25,
         marginLeft: 30,
     }
 
