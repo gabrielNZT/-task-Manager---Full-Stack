@@ -22,20 +22,20 @@ const EditGroupCard = (props) => {
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
 
-    const [title, setTitle] = useState(state.current !== undefined ? state.current.title : '');
+    const [header, setTitle] = useState(state.current !== undefined ? state.current.header : '');
     const [description, setDescription] = useState(state.current !== undefined ? state.current.description : '');
 
     const handleSubmit = (e) => {
         e.preventDefault();
         api
         .put("/api/tarefa/"+state.current.id, {
-            position: state.current.index,
-            header: title,
+            position: state.current.position,
+            header: header,
             description: description,
             user: JSON.parse(localStorage.getItem('user')).id
         }, {headers: headers()})
-        .then((response)=> console.log(response.data))
-        dispatch({ type: 'UPDATE_GROUP_CARD', payload: { title, description } });
+        .then();
+        dispatch({ type: 'UPDATE_GROUP_CARD', payload: { header, description } });
     }
 
     const handleDelete = () => {
@@ -55,7 +55,7 @@ const ModalContent = React.memo((props) => {
                 <Form.Control onChange={event => setTitle(event.target.value)}
                     type="text"
                     name='title'
-                    value={title}
+                    value={header}
                     required
                     placeholder="exemplo: Task 1"
                 />

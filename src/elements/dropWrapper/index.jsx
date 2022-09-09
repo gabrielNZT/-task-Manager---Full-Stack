@@ -11,16 +11,15 @@ const DropWrapper = ({ children, group }) => {
         accept: 'ITEM',
         drop: (item, _) => {
             if (group.cards.length === 0) {
-                const draggedIndex = item.index;
-                const targetIndex = 0;
+                const draggedPosition = item.position;
+                const targetPosition = 0;
 
-                const draggedListIndex = item.parentOrder;
-                const targetListIndex = group.index;
+                const draggedListPosition = item.parentOrder;
+                const targetListPosition = group.position;
 
-                const groupId = group.id;
                 const cardId = item.cardId
 
-                moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex, groupId, cardId);
+                moveItem(draggedListPosition, targetListPosition, draggedPosition, targetPosition, cardId);
             }
 
         },

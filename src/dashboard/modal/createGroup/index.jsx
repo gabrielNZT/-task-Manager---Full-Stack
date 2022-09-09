@@ -22,15 +22,15 @@ const CreateGroupCard = (props) => {
 
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
-    const [title, setTitle] = useState('');
+    const [header, setTitle] = useState('');
 
     const handleSubmit = (e) => {
-        const index = state.groups.length;
+        const position = state.groups.length;
         e.preventDefault();
         api
         .post("/api/grupo", {
-            header: title,
-            position: index,
+            header: header,
+            position: position,
             cards: [],
         }, {headers: headers()})
         .then((response) => dispatch({ type: 'ADD_GROUP', payload: response.data}));
@@ -55,7 +55,7 @@ const ModalContent = React.memo((props) => {
                     type="text"
                     name='header'
                     placeholder="exemplo: grupo de tarefas"
-                    value={title}
+                    value={header}
                     autoFocus
                     required
                 />

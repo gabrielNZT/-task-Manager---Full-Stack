@@ -2,7 +2,7 @@ import api from '../api.js'
 import headers from './header.js';
 
 export const logIn = (response) => {
-        localStorage.setItem('auth', JSON.stringify(response))        
+        localStorage.setItem('auth', JSON.stringify(response.data))        
 }
 
 export const logOut = () => {

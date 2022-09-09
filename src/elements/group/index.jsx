@@ -14,8 +14,8 @@ import api from '../../service/api';
 import headers from '../../service/security/header.js';
 
 const Group = (props) => {
-    const { group: { id, title, cards }, dispatch, group } = props;
-    const [header, setHeader] = useState(title);
+    const { group: { id, header, cards }, dispatch, group } = props;
+    const [title, setHeader] = useState(header);
 
 
     const headerInputRef = useRef(null);
@@ -54,14 +54,14 @@ const Group = (props) => {
 
 
     const handleTitleUpdate = () => {
-        if (header !== title) {
+        if (title !== header) {
             api
             .put("/api/grupo/"+id, {
-                position: group.index,
-                header: header
+                position: group.position,
+                header: title
             }, {headers: headers()})
             .then();
-            dispatch({ type: 'UPDATE_GROUP_TITLE', payload: { id, title: header } })
+            dispatch({ type: 'UPDATE_GROUP_TITLE', payload: { id, header: title } })
         }
     }
 
@@ -107,14 +107,14 @@ const Group = (props) => {
                                 ref={headerInputRef}
                                 required
                                 type='text'
-                                value={header}
+                                value={title}
                             />
                         </Form.Label>
                     </Form>
                     <DeleteGroupButton onClick={handleDelete} />
                 </Card.Header>
                 <Card.Body id='card-body' style={cardBodyStyle}>
-                    {cards.sort((a, b) => a.index - b.index).map((card) => (<GroupCard key={card.id} card={card} parent={group} dispatch={dispatch} />))}
+                    {cards.sort((a, b) => a.position - b.position).map((card) => (<GroupCard key={card.id} card={card} parent={group} dispatch={dispatch} />))}
                     <AddGroupCardButton onClick={handleClickAdd} />
                 </Card.Body>
             </Card>

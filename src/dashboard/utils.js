@@ -2,9 +2,9 @@ export function reorderGroupsCards(groups) {
     return groups.map(group => {
         return {
             ...group,
-            cards: group.cards.map((card, index) => ({
+            cards: group.cards.map((card, position) => ({
                 ...card,
-                index: index
+                position: position
             }))
         }
     }

@@ -22,20 +22,20 @@ const EditGroupCard = (props) => {
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
 
-    const [title, setTitle] = useState('');
+    const [header, setTitle] = useState('');
     const [description, setDescription] = useState('');
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (state.current) {
-            const index = state.current.cards.length;
+            const position = state.current.cards.length;
             e.preventDefault();
 
             api
             .post("/api/tarefa", {
-                position: index,
-                header: title,
+                position: position,
+                header: header,
                 description: description,
                 grupo: state.current.id,
                 user: JSON.parse(localStorage.getItem('user')).id
@@ -56,7 +56,7 @@ const ModalContent = React.memo((props) => {
                 <Form.Control
                     type="text"
                     name='name'
-                    value={title}
+                    value={header}
                     onChange={event => setTitle(event.target.value)}
                     placeholder="Exemplo: Task 1"
                     required

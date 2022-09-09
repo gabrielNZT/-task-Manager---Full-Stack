@@ -8,7 +8,7 @@ export default function DropButton(){
   const [isAdmin, setIsAdmin] = useState(null);
 
   useEffect(() => {
-    if(JSON.parse(localStorage.getItem('auth')).data.roles[0] === 'ROLE_ADMIN'){
+    if(JSON.parse(localStorage.getItem('auth')).roles[0] === 'ROLE_ADMIN'){
       setIsAdmin(true);
     } else {
       setIsAdmin(false);

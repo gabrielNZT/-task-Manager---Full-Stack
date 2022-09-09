@@ -6,12 +6,12 @@ export const reducer = (state, action) => {
         case 'FETCH_DATA':
             return { ...state, status: 'idle', groups: action.payload };
         case 'UPDATE_GROUP_TITLE':
-            return { ...state, groups: state.groups.map(group => group.id === action.payload.id ? { ...group, title: action.payload.title } : group) };
+            return { ...state, groups: state.groups.map(group => group.id === action.payload.id ? { ...group, header: action.payload.header } : group) };
         case 'DELETE_GROUP':
             if (state.current) {
                 const newList = state.groups.filter(group => group.id !== state.current.id)
                 return {
-                    ...state, groups: newList.map(group => group.index > state.current.index ? {...group, index: (group.index - 1)} : group), modal: undefined, current: undefined
+                    ...state, groups: newList.map(group => group.position > state.current.position ? {...group, position: (group.position - 1)} : group), modal: undefined, current: undefined
                 }
                 
             } else {
@@ -54,12 +54,11 @@ export const reducer = (state, action) => {
                 draft[fromList].cards.splice(from, 1);
                 draft[toList].cards.splice(to, 0, dragged);
             });
-            console.log(newListState)
             return { ...state, groups: reorderGroupsCards(newListState)};
         case 'DELETE_GROUP_CARD':
             if (state.current) {
                 var currentGroup = findGroup(state.groups, state.current.id);
-                var cardList = currentGroup.cards.map(card => card.index > state.current.index ? {...card, index: (card.index - 1)} : card)
+                var cardList = currentGroup.cards.map(card => card.position > state.current.position ? {...card, position: (card.position - 1)} : card)
                 var newList = state.groups;
                 
                 newList = newList.map(group => group.id === currentGroup.id ? {...group, cards: cardList} : group)

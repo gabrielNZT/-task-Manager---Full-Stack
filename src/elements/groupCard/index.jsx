@@ -8,7 +8,7 @@ import { Container } from './styles';
 
 const GroupCard = (props) => {
     const { parent, dispatch, card } = props;
-    const { title } = card;
+    const { header } = card;
 
 
     const cardRef = useRef(null);
@@ -23,34 +23,36 @@ const GroupCard = (props) => {
                 return;
             }
             
-            const draggedIndex = item.index;
-            const targetIndex = card.index;
+            const draggedIndex = item.position;
+            const targetIndex = card.position;
 
             const draggedListIndex = item.parentOrder;
-            const targetListIndex = parent.index;
-
+            const targetListIndex = parent.position;
 
             if (draggedIndex === targetIndex && draggedListIndex === targetListIndex) {
                 return;
             }
+
 
             const hoveredRect = cardRef.current.getBoundingClientRect();
             const hoverMiddleY = (hoveredRect.bottom - hoveredRect.top) / 2;
             const mousePosition = monitor.getClientOffset();
             const hoverClientY = mousePosition.y - hoveredRect.top;
 
+            // move down
             if (draggedIndex < targetIndex && hoverMiddleY < hoverClientY) {
                 return;
             }
 
+            // move up
             if (draggedIndex > targetIndex && hoverClientY < hoverMiddleY) {
                 return;
             }
-            const idGroup = parent.id;
+
             const idCard = item.cardId;
 
-            moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex, idGroup, idCard);
-            item.index = targetIndex;
+            moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex, idCard);
+            item.position = targetIndex;
             item.parentOrder = targetListIndex;
             
         }
@@ -59,7 +61,7 @@ const GroupCard = (props) => {
 
     const [{ isDragging }, drag] = useDrag({
         type: 'ITEM',
-        item: { index: card.index, parentOrder: parent.index, parentCardsLength: parent.cards.length, cardId: card.id },
+        item: { position: card.position, parentOrder: parent.position, parentCardsLength: parent.cards.length, cardId: card.id },
         collect: monitor => ({
             isDragging: monitor.isDragging(),
         }),
@@ -73,7 +75,7 @@ const GroupCard = (props) => {
         dispatch({ type: 'SHOW_MODAL', payload: { modal: 'EDIT_GROUP_CARD', current: card } })
     }
     return <Container ref={cardRef} onClick={onClick} isDragging={isDragging}>
-        <h1>{title}</h1>
+        <h1>{header}</h1>
     </Container>;
 }
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState} from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import GroupList from './groupList';
 import { DeleteGroupModal, EditGroupCardModal, CreateGroupCardModal, CreateGroupModal } from './modal';
 import DragContext from '../contexts/dragContext';
@@ -11,49 +11,37 @@ import { currentUser } from "../service/security/auth.js";
 const Board = () => {
 
     const [state, dispatch] = useReducer(reducer, { groups: [], status: 'idle' });
-    const [isChange, setIsChange] = useState(false);
-    const [indexToGroup, setIndexToGroup] = useState(null);
-    const [indexFromGroup, setIndexFromGroup] = useState(null);
+    const [card, setCard] = useState(null);
 
     useEffect(() => {
         api
-        .get("/api/grupo", {headers: headers()})
-        .then((response) => dispatch({type: 'FETCH_DATA', payload: response.data}))
-        .catch((err) => {
-            console.log(err);
-        });
-        
+            .get("/api/grupo", { headers: headers() })
+            .then((response) => dispatch({ type: 'FETCH_DATA', payload: response.data }))
+            .catch((err) => {
+                console.log(err);
+            });
+
         currentUser();
     }, []);
 
-    if(isChange === true){
-
-        console.log(state.groups[indexToGroup])
-        
-         api
-        .put("/api/grupo/"+state.groups[indexToGroup].id, {
-            header: state.groups[indexToGroup].title,
-            position: state.groups[indexToGroup].index,
-            cards: state.groups[indexToGroup].cards
-        }, {headers: headers()})
-        .then();
-
-        console.log(state.groups[indexFromGroup])
-        api
-        .put("/api/grupo/"+state.groups[indexFromGroup].id, {
-            header: state.groups[indexFromGroup].title,
-            position: state.groups[indexFromGroup].index,
-            cards: state.groups[indexFromGroup].cards
-        }, {headers: headers()})
-        .then(); 
-        
-        setIsChange(false);
-    }
+    useEffect(() => {
+        if(card !== null){
+            api
+            .put("/api/moveCard/"+card.id, {
+                header: card.header,
+                position: card.position,
+                description: card.description,
+                grupo: card.grupo
+            }, {headers: headers()})
+            .then(response => console.log(response))
+            .catch(function (error) {
+                console.log(error);
+            })
+        }
+    }, [card]);
 
     const moveCardItem = (fromList, toList, from, to) => {
-        setIsChange(true);
-        setIndexToGroup(toList);
-        setIndexFromGroup(fromList);
+        setCard({...state.groups[fromList].cards[from], grupo: state.groups[toList].id, position: to});
         dispatch({ type: 'MOVE_ITEM', payload: { fromList, toList, from, to } });
     }
 
