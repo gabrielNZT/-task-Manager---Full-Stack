@@ -11,12 +11,12 @@ export function reorderGroupsCards(groups) {
     );
 }
 
-export function findGroup(groups, cardId){
+export function findGroup(groups, cardId) {
     var currentGroup = null
     groups.forEach(group => {
         group.cards.forEach(card => {
-            if(card.id === cardId){
-              currentGroup = group
+            if (card.id === cardId) {
+                currentGroup = group
             }
         })
     })

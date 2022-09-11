@@ -25,23 +25,23 @@ const Board = () => {
     }, []);
 
     useEffect(() => {
-        if(card !== null){
+        if (card !== null) {
             api
-            .put("/api/moveCard/"+card.id, {
-                header: card.header,
-                position: card.position,
-                description: card.description,
-                grupo: card.grupo
-            }, {headers: headers()})
-            .then(response => console.log(response))
-            .catch(function (error) {
-                console.log(error);
-            })
+                .put("/api/moveCard/" + card.id, {
+                    header: card.header,
+                    position: card.position,
+                    description: card.description,
+                    grupo: card.grupo
+                }, { headers: headers() })
+                .then()
+                .catch(function (error) {
+                    console.log(error);
+                })
         }
     }, [card]);
 
     const moveCardItem = (fromList, toList, from, to) => {
-        setCard({...state.groups[fromList].cards[from], grupo: state.groups[toList].id, position: to});
+        setCard({ ...state.groups[fromList].cards[from], grupo: state.groups[toList].id, position: to });
         dispatch({ type: 'MOVE_ITEM', payload: { fromList, toList, from, to } });
     }
 
