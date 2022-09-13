@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import api from '../../../service/api';
 import headers from '../../../service/security/header.js';
+import Historic from '../../../elements/historic/index.js';
 
 const EditGroupCard = (props) => {
     const { dispatch, visible } = props;
@@ -21,9 +22,20 @@ const EditGroupCard = (props) => {
 
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
-
     const [header, setTitle] = useState(state.current !== undefined ? state.current.header : '');
     const [description, setDescription] = useState(state.current !== undefined ? state.current.description : '');
+    const [historyList, setHistoryList] = useState([]);
+    const cardID = state.current !== undefined ? state.current.id : null;
+    
+    useEffect(() => {
+        api
+        .get("/api/userCard", {headers: headers()})
+        .then(response => setHistoryList(response.data))
+        .catch(function (error) {
+            console.log(error)
+        })
+    }, []);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -72,10 +84,11 @@ const ModalContent = React.memo((props) => {
                     placeholder='exemplo: Reunião com o DR. Paulo no dia 10/08'
                 />
             </Form.Group>
+            <Historic historyList={historyList.filter(Element => Element.card.id === cardID)}/>
         </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" style={{ background: '#FF0000' }} onClick={handleDelete}>
-                Deletar
+                Deletar 
             </Button>
             <Button id='buttonNewCard' variant="primary" type='submit'>
                 Salvar

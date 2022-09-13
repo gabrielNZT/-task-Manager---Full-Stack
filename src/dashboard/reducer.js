@@ -10,7 +10,7 @@ export const reducer = (state, action) => {
         case 'DELETE_GROUP':
             if (state.current) {
                 const newList = state.groups.filter(group => group.id !== state.current.id)
-                return {
+                return { 
                     ...state, groups: newList.map(group => group.position > state.current.position ? {...group, position: (group.position - 1)} : group), modal: undefined, current: undefined
                 }
                 

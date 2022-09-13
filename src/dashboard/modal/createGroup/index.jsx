@@ -23,7 +23,7 @@ const CreateGroupCard = (props) => {
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
     const [header, setTitle] = useState('');
-
+    
     const handleSubmit = (e) => {
         const position = state.groups.length;
         e.preventDefault();

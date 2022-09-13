@@ -1,0 +1,9 @@
+label {
+    color: black;
+}
+
+.button-newUser {
+    margin-left: 1%;
+    border-radius: 4%;
+    background-color: #020e4d;
+}
