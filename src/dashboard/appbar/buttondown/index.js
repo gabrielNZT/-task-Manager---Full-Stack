@@ -19,7 +19,6 @@ export default function DropButton(){
         <DropdownButton className='Dropdown-button' id="dropdown-basic-button" title="Menu" variant='primary'>
           <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
           {isAdmin ? <Dropdown.Item  href="/users">Controle de Usuário</Dropdown.Item> : null}
-          <Dropdown.Item href="#/action-3">Editar perfil</Dropdown.Item>
           <Dropdown.Item style={{color: 'red'}} href="/">SAIR</Dropdown.Item>
         </DropdownButton>
       );

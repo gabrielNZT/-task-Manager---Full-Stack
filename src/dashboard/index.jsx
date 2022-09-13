@@ -7,15 +7,22 @@ import { Container } from "./styles";
 import api from "../service/api"
 import headers from '../service/security/header'
 import { currentUser } from "../service/security/auth.js";
+import { useState } from "react";
+import Spin from '../spin/spinner.js'
 
 const Board = () => {
 
     const [state, dispatch] = useReducer(reducer, { groups: [], status: 'idle' });
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         api
             .get("/api/grupo", { headers: headers() })
-            .then((response) => dispatch({ type: 'FETCH_DATA', payload: response.data }))
+            .then((response) => { 
+                dispatch({ type: 'FETCH_DATA', payload: response.data })
+                setLoading(false)
+            })
             .catch((err) => {
                 console.log(err);
             });
@@ -37,6 +44,7 @@ const Board = () => {
             <DragContext.Provider value={{ list: state.groups, moveItem: moveCardItem }}>
                 <Container>
                     <GroupList state={state} dispatch={dispatch} />
+                    {loading ? (<Spin/>) : null}
                 </Container>
             </DragContext.Provider>
 
