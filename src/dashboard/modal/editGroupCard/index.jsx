@@ -26,8 +26,9 @@ const ModalContent = React.memo((props) => {
     const [description, setDescription] = useState(state.current !== undefined ? state.current.description : '');
     const [historyList, setHistoryList] = useState([]);
     const cardID = state.current !== undefined ? state.current.id : null;
-    
+
     useEffect(() => {
+        
         api
         .get("/api/userCard", {headers: headers()})
         .then(response => setHistoryList(response.data))

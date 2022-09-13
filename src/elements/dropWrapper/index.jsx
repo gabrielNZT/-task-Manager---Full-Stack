@@ -1,5 +1,7 @@
 import React, { useContext } from 'react';
 import { useDrop } from 'react-dnd';
+import headers from '../../service/security/header';
+import api from '../../service/api';
 
 import DragContext from '../../contexts/dragContext';
 
@@ -19,7 +21,19 @@ const DropWrapper = ({ children, group }) => {
 
                 const cardId = item.cardId
 
-                moveItem(draggedListPosition, targetListPosition, draggedPosition, targetPosition, cardId);
+                console.log()
+
+                api
+                    .put("/api/moveCard/" + item.cardId, {
+                        header: item.header,
+                        description: item.description,
+                        position: targetPosition,
+                        grupo: group.id
+                    }, { headers: headers() })
+                    .then(moveItem(draggedListPosition, targetListPosition, draggedPosition, targetPosition, cardId))
+                    .catch(function (error) {
+                        console.log(error)
+                    })
             }
 
         },

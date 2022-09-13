@@ -2,6 +2,8 @@ import React, { useRef, useContext } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 import DragContext from '../../contexts/dragContext';
+import api from '../../service/api';
+import headers from '../../service/security/header';
 
 import { Container } from './styles';
 
@@ -17,7 +19,7 @@ const GroupCard = (props) => {
 
     const [, drop] = useDrop({
         accept: 'ITEM',
-        hover(item, monitor) {
+        hover (item, monitor) {
 
             if (!cardRef.current) {
                 return;
@@ -33,7 +35,6 @@ const GroupCard = (props) => {
                 return;
             }
 
-
             const hoveredRect = cardRef.current.getBoundingClientRect();
             const hoverMiddleY = (hoveredRect.bottom - hoveredRect.top) / 2;
             const mousePosition = monitor.getClientOffset();
@@ -43,7 +44,6 @@ const GroupCard = (props) => {
             if (draggedIndex < targetIndex && hoverMiddleY < hoverClientY) {
                 return;
             }
-
             // move up
             if (draggedIndex > targetIndex && hoverClientY < hoverMiddleY) {
                 return;
@@ -54,14 +54,26 @@ const GroupCard = (props) => {
             moveItem(draggedListIndex, targetListIndex, draggedIndex, targetIndex, idCard);
             item.position = targetIndex;
             item.parentOrder = targetListIndex;
-            
+        },
+        drop (item, monitor) {
+            api
+            .put("/api/moveCard/"+card.id, {
+                header: card.header,
+                description: card.description,
+                position: item.position,
+                grupo: parent.id
+            }, {headers: headers()})
+            .then()
+            .catch(function (error) {
+                console.log(error)
+            })
         }
     })
 
 
     const [{ isDragging }, drag] = useDrag({
         type: 'ITEM',
-        item: { position: card.position, parentOrder: parent.position, parentCardsLength: parent.cards.length, cardId: card.id },
+        item: { position: card.position, parentOrder: parent.position, parentCardsLength: parent.cards.length, cardId: card.id, grouId: parent.id, header: card.header, description: card.description },
         collect: monitor => ({
             isDragging: monitor.isDragging(),
         }),

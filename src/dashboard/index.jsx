@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import GroupList from './groupList';
 import { DeleteGroupModal, EditGroupCardModal, CreateGroupCardModal, CreateGroupModal } from './modal';
 import DragContext from '../contexts/dragContext';
@@ -11,7 +11,6 @@ import { currentUser } from "../service/security/auth.js";
 const Board = () => {
 
     const [state, dispatch] = useReducer(reducer, { groups: [], status: 'idle' });
-    const [card, setCard] = useState(null);
 
     useEffect(() => {
         api
@@ -24,24 +23,8 @@ const Board = () => {
         currentUser();
     }, []);
 
-    useEffect(() => {
-        if (card !== null) {
-            api
-                .put("/api/moveCard/" + card.id, {
-                    header: card.header,
-                    position: card.position,
-                    description: card.description,
-                    grupo: card.grupo
-                }, { headers: headers() })
-                .then()
-                .catch(function (error) {
-                    console.log(error);
-                })
-        }
-    }, [card]);
 
     const moveCardItem = (fromList, toList, from, to) => {
-        setCard({ ...state.groups[fromList].cards[from], grupo: state.groups[toList].id, position: to });
         dispatch({ type: 'MOVE_ITEM', payload: { fromList, toList, from, to } });
     }
 
