@@ -4,7 +4,7 @@ import "../styles/style.css"
 import { useRef, useState, useEffect } from 'react'
 import api from '../../../service/api'
 import toast, { Toaster } from 'react-hot-toast';
-import { logIn } from '../../../service/security/auth.js'
+import { currentUser, logIn } from '../../../service/security/auth.js'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -39,6 +39,7 @@ function LoginForm() {
             .then(response => {
                 if(response.status === 200){
                     logIn(response);
+                    currentUser();
                     navigate('../dashboard', {replace: true})
                 }
             })

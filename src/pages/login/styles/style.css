@@ -6,12 +6,13 @@ label{
 
 .form-login {
     width: 500px;
-    height: 70%;
+    height: fit-content;
     margin-bottom: 5%;
     margin-top: 5%;
     margin-left: 15px;
     background: #343334;
     border-radius: 5%;
+    padding: 10px;
   }
 
   .title-login{

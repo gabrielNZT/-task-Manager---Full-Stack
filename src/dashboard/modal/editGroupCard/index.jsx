@@ -5,10 +5,11 @@ import Button from 'react-bootstrap/Button';
 import api from '../../../service/api';
 import headers from '../../../service/security/header.js';
 import Historic from '../../../elements/historic/index.js';
+import { Spinner } from 'react-bootstrap';
 
 const EditGroupCard = (props) => {
     const { dispatch, visible } = props;
-
+    
 
     const onClose = () => {
         dispatch({ type: 'HIDE_MODAL' });
@@ -25,13 +26,17 @@ const ModalContent = React.memo((props) => {
     const [header, setTitle] = useState(state.current !== undefined ? state.current.header : '');
     const [description, setDescription] = useState(state.current !== undefined ? state.current.description : '');
     const [historyList, setHistoryList] = useState([]);
+    const [loading, setLoading] = useState(true)
     const cardID = state.current !== undefined ? state.current.id : null;
 
     useEffect(() => {
         
         api
         .get("/api/userCard", {headers: headers()})
-        .then(response => setHistoryList(response.data))
+        .then(response => {
+            setHistoryList(response.data);
+            setLoading(false);
+        })
         .catch(function (error) {
             console.log(error)
         })
@@ -85,7 +90,8 @@ const ModalContent = React.memo((props) => {
                     placeholder='exemplo: Reunião com o DR. Paulo no dia 10/08'
                 />
             </Form.Group>
-            <Historic historyList={historyList.filter(Element => Element.card.id === cardID)}/>
+            {loading ? (<Spinner animation="border"/>) : null}
+            {!loading ? (<Historic historyList={historyList.filter(Element => Element.card.id === cardID)}/>) : null}
         </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" style={{ background: '#FF0000' }} onClick={handleDelete}>

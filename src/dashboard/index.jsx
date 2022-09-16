@@ -9,6 +9,8 @@ import headers from '../service/security/header'
 import { currentUser } from "../service/security/auth.js";
 import { useState } from "react";
 import Spin from '../spin/spinner.js'
+import {openNotification} from '../elements/popup/index.js'
+import AppBar from "./appbar";
 
 const Board = () => {
 
@@ -16,18 +18,20 @@ const Board = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
+        currentUser();
         setLoading(true);
         api
             .get("/api/grupo", { headers: headers() })
             .then((response) => { 
                 dispatch({ type: 'FETCH_DATA', payload: response.data })
                 setLoading(false)
+                if(JSON.parse(localStorage.getItem('user')).receiveEmail){
+                    openNotification()
+                }
             })
             .catch((err) => {
                 console.log(err);
             });
-
-        currentUser();
     }, []);
 
 
@@ -42,6 +46,7 @@ const Board = () => {
             <EditGroupCardModal visible={state.modal === 'EDIT_GROUP_CARD'} dispatch={dispatch} state={state} />
             <DeleteGroupModal visible={state.modal === 'DELETE_GROUP'} dispatch={dispatch} state={state} />
             <DragContext.Provider value={{ list: state.groups, moveItem: moveCardItem }}>
+                <AppBar/>
                 <Container>
                     <GroupList state={state} dispatch={dispatch} />
                     {loading ? (<Spin/>) : null}

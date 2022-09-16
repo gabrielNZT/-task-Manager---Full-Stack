@@ -10,10 +10,10 @@ export const reducer = (state, action) => {
         case 'DELETE_GROUP':
             if (state.current) {
                 const newList = state.groups.filter(group => group.id !== state.current.id)
-                return { 
-                    ...state, groups: newList.map(group => group.position > state.current.position ? {...group, position: (group.position - 1)} : group), modal: undefined, current: undefined
+                return {
+                    ...state, groups: newList.map(group => group.position > state.current.position ? { ...group, position: (group.position - 1) } : group), modal: undefined, current: undefined
                 }
-                
+
             } else {
                 return state;
             }
@@ -46,30 +46,30 @@ export const reducer = (state, action) => {
 
         case 'MOVE_ITEM':
             const { from, to, fromList, toList } = action.payload;
-            
+
             const newListState = produce(state.groups, draft => {
 
                 const dragged = draft[fromList].cards[from];
-                
+
                 draft[fromList].cards.splice(from, 1);
                 draft[toList].cards.splice(to, 0, dragged);
             });
-            return { ...state, groups: reorderGroupsCards(newListState)};
+            return { ...state, groups: reorderGroupsCards(newListState) };
         case 'DELETE_GROUP_CARD':
             if (state.current) {
                 var currentGroup = findGroup(state.groups, state.current.id);
-                var cardList = currentGroup.cards.map(card => card.position > state.current.position ? {...card, position: (card.position - 1)} : card)
+                var cardList = currentGroup.cards.map(card => card.position > state.current.position ? { ...card, position: (card.position - 1) } : card)
                 var newList = state.groups;
-                
-                newList = newList.map(group => group.id === currentGroup.id ? {...group, cards: cardList} : group)
+
+                newList = newList.map(group => group.id === currentGroup.id ? { ...group, cards: cardList } : group)
                 newList = newList.map(group => {
-                    return{
+                    return {
                         ...group,
                         cards: group.cards.filter(groupCard => groupCard.id !== state.current.id)
                     }
                 })
-                          
-                return {...state, groups: newList, modal: undefined, current: undefined}
+
+                return { ...state, groups: newList, modal: undefined, current: undefined }
 
             } else {
                 return state;
@@ -81,6 +81,9 @@ export const reducer = (state, action) => {
             return { ...state, ...action.payload };
         case 'HIDE_MODAL':
             return { ...state, modal: undefined, current: undefined };
+
+        case 'CURRENT_USER':
+            return {...state, user:{ ...action.payload, receiveEmail: action.payload.receiveEmail? false: true} }
 
         default:
             return state

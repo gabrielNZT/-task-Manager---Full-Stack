@@ -6,7 +6,7 @@ import 'moment/locale/pt-br'
 
 function Historic(props) {
   const {historyList} = props
-
+  
   return (
     <Card style={{ width: 'max-content'  }}>
       <Card.Header className='title-historic'>Histórico</Card.Header>
