@@ -5,6 +5,7 @@ import headers from '../../service/security/header';
 
 function handleReceiveEmail (key) {
   const currentUser = JSON.parse(localStorage.getItem('user'))
+  localStorage.setItem('user', JSON.stringify({...currentUser, receiveEmail: false}))
   api
   .put("/api/user/" +currentUser.id, {
     receiveEmail: false

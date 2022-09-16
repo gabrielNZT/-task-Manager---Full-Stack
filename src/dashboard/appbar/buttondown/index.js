@@ -10,18 +10,16 @@ export default function DropButton() {
 
   const [isAdmin, setIsAdmin] = useState(null);
   const [currentUser, setCurrentUser] = useState(JSON.parse(localStorage.getItem('user')) === undefined? null: JSON.parse(localStorage.getItem('user')))
-  
-  
-  function handleActive( ) {
-    if(JSON.parse(localStorage.getItem('user')) !== null){
-      if(!JSON.parse(localStorage.getItem('user')).receiveEmail){
-        return (<Dropdown.Item onClick={() => handleReceiveEmail()} >Ativar Notificações</Dropdown.Item>)
-      }
-    }
-    return null
-  }
+  const [ativarDesativar, setAtivarDesativar] = useState(false);
+  let receiveEmail = JSON.parse(localStorage.getItem('user'))?.receiveEmail
 
-  const handleReceiveEmail = () => {
+ 
+  useEffect(() => {
+    setAtivarDesativar(receiveEmail)
+  }, [receiveEmail]);
+
+  
+  const handleReceiveEmail = (currentUser) => {
     api
       .put("/api/user/" + JSON.parse(localStorage.getItem('user')).id, {
         receiveEmail: true
@@ -47,7 +45,7 @@ export default function DropButton() {
     <DropdownButton className='Dropdown-button' id="dropdown-basic-button" title="Menu" variant='primary'>
       <Dropdown.Item href="/dashboard">Dashboard</Dropdown.Item>
       {isAdmin ? <Dropdown.Item href="/users">Controle de Usuário</Dropdown.Item> : null}
-      {handleActive(currentUser)}
+      {!ativarDesativar && <Dropdown.Item onClick={() => handleReceiveEmail(currentUser)} >Ativar Notificações</Dropdown.Item>}
       <Dropdown.Item style={{ color: 'red' }} href="/">SAIR</Dropdown.Item>
     </DropdownButton>
   );
