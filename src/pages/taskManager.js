@@ -7,7 +7,7 @@ import Dashboard from '../dashboard';
 function TaskManager() {
   return (
     <DndProvider backend={HTML5Backend}>
-      <GlobalStyle />
+      <GlobalStyle/>
       <Dashboard />
     </DndProvider>
   );

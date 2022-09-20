@@ -1,0 +1,12 @@
+.Dropdown-button{
+    justify-content: right;
+    right: 3%;
+    margin-top: 1%;
+    position: absolute;
+}
+
+.div-dropdown{
+    height: max-content;
+    width: max-content;
+    flex-direction: column-reverse;
+}

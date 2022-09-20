@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import api from '../../../service/api';
-import headers from '../../../service/security/header.js';
+import { postGroup } from '../../../service/requests.js';
 
 
 const CreateGroupCard = (props) => {
@@ -22,20 +21,17 @@ const CreateGroupCard = (props) => {
 
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
-    const [title, setTitle] = useState('');
-
+    const [header, setTitle] = useState('');
+    
     const handleSubmit = (e) => {
-        const index = state.groups.length;
         e.preventDefault();
-        api
-        .post("/api/grupo", {
-            header: title,
-            position: index,
-            cards: [],
-        }, {headers: headers()})
-        .then((response) => dispatch({ type: 'ADD_GROUP', payload: response.data}));
-
-        //dispatch({ type: 'ADD_GROUP', payload: { id: Math.floor(Math.random() * 10000), title, order, cards: [] } });
+        const position = state.groups.length;
+        const grupo = {
+            header: header,
+            position: position,
+            cards: []
+        };
+        postGroup(grupo).then(response => dispatch({type: 'ADD_GROUP', payload: response.data}))
     }
 
     const handleOnChange = e => {
@@ -55,7 +51,7 @@ const ModalContent = React.memo((props) => {
                     type="text"
                     name='header'
                     placeholder="exemplo: grupo de tarefas"
-                    value={title}
+                    value={header}
                     autoFocus
                     required
                 />

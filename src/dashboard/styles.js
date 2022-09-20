@@ -8,6 +8,4 @@ export const Container = styled.div`
    min-height: 99%;
    flex-grow: 1;
    display: flex;
-   margin-top: 8px;
-   border: 2px solid black;
 `;

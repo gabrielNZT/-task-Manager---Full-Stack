@@ -6,7 +6,7 @@ const header = {
 function headers() {
         return{
                 ...header,
-                Authorization:  `Bearer ${JSON.parse(localStorage.getItem('auth')).data.access_token}`
+                Authorization:  `Bearer ${JSON.parse(localStorage.getItem('auth'))?.access_token}`
         }
 }
 

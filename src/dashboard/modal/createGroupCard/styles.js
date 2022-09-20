@@ -21,12 +21,12 @@ const CreateGroupCard = (props) => {
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
 
-    const [title, setTitle] = useState(state.current !== undefined ? state.current.title : '');
+    const [header, setTitle] = useState(state.current !== undefined ? state.current.header : '');
     const [description, setDescription] = useState(state.current !== undefined ? state.current.description : '');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch({ type: 'UPDATE_GROUP_CARD', payload: { title, description } });
+        dispatch({ type: 'UPDATE_GROUP_CARD', payload: { header, description } });
     }
 
     const handleDelete = () => {
@@ -44,7 +44,7 @@ const ModalContent = React.memo((props) => {
                 <Form.Control onChange={event => setTitle(event.target.value)}
                     type="text"
                     name='title'
-                    value={title}
+                    value={header}
                     required
                     placeholder="exemplo: Task 1"
                 />

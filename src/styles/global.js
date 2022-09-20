@@ -10,12 +10,11 @@ export default createGlobalStyle`
   }
   html, body, #root {
     flex-grow: 1;
-    height: 99%;
-    width: 99%;
-    margin-left: 8px;
-    margin-right: 8px;
+    height: 95%;
+    width: 100%;
   }
   body {
+    background: #E9EBF4;
     font: 14px sans-serif;
     color: #000000;
     -webkit-font-smoothing: antialiased !important;

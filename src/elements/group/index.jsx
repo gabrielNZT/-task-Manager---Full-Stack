@@ -10,12 +10,12 @@ import GroupCard from '../groupCard';
 
 import { Container } from './styles';
 import 'bootstrap/dist/css/bootstrap.min.css'
-import api from '../../service/api';
-import headers from '../../service/security/header.js';
+import { updateGroupTitle } from '../../service/requests.js';
+
 
 const Group = (props) => {
-    const { group: { id, title, cards }, dispatch, group } = props;
-    const [header, setHeader] = useState(title);
+    const { group: { id, header, cards }, dispatch, group } = props;
+    const [title, setHeader] = useState(header);
 
 
     const headerInputRef = useRef(null);
@@ -23,7 +23,7 @@ const Group = (props) => {
 
     const cardStyle = {
         width: '18rem',
-        marginTop: 20,
+        marginTop: 25,
         marginLeft: 30,
     }
 
@@ -54,14 +54,8 @@ const Group = (props) => {
 
 
     const handleTitleUpdate = () => {
-        if (header !== title) {
-            api
-            .put("/api/grupo/"+id, {
-                position: group.index,
-                header: header
-            }, {headers: headers()})
-            .then();
-            dispatch({ type: 'UPDATE_GROUP_TITLE', payload: { id, title: header } })
+        if (title !== header) {
+            updateGroupTitle(id, header).then( dispatch({ type: 'UPDATE_GROUP_TITLE', payload: { id, header: title } }) )
         }
     }
 
@@ -107,14 +101,14 @@ const Group = (props) => {
                                 ref={headerInputRef}
                                 required
                                 type='text'
-                                value={header}
+                                value={title}
                             />
                         </Form.Label>
                     </Form>
                     <DeleteGroupButton onClick={handleDelete} />
                 </Card.Header>
                 <Card.Body id='card-body' style={cardBodyStyle}>
-                    {cards.sort((a, b) => a.index - b.index).map((card) => (<GroupCard key={card.id} card={card} parent={group} dispatch={dispatch} />))}
+                    {cards.sort((a, b) => a.position - b.position).map((card) => (<GroupCard key={card.id} card={card} parent={group} dispatch={dispatch} />))}
                     <AddGroupCardButton onClick={handleClickAdd} />
                 </Card.Body>
             </Card>

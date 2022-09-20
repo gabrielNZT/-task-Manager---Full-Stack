@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import api from '../../../service/api';
-import headers from '../../../service/security/header.js';
+import { deleteCard, updateCard, getUserCards } from '../../../service/requests.js';
+import Historic from '../../../elements/historic/index.js';
+import { Spinner } from 'react-bootstrap';
 
 const EditGroupCard = (props) => {
     const { dispatch, visible } = props;
-
+    
 
     const onClose = () => {
         dispatch({ type: 'HIDE_MODAL' });
@@ -21,27 +22,36 @@ const EditGroupCard = (props) => {
 
 const ModalContent = React.memo((props) => {
     const { dispatch, state } = props;
-
-    const [title, setTitle] = useState(state.current !== undefined ? state.current.title : '');
+    const [header, setTitle] = useState(state.current !== undefined ? state.current.header : '');
     const [description, setDescription] = useState(state.current !== undefined ? state.current.description : '');
+    const [historyList, setHistoryList] = useState([]);
+    const [loading, setLoading] = useState(true)
+    const cardID = state.current !== undefined ? state.current.id : null;
+
+    useEffect(() => {
+
+        getUserCards().then(response => {
+            setHistoryList(response.data);
+            setLoading(false);
+        })
+    }, []);
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        api
-        .put("/api/tarefa/"+state.current.id, {
-            position: state.current.index,
-            header: title,
+        const card = {
+            id: state.current.id,
+            position: state.current.position,
+            header: header,
             description: description,
             user: JSON.parse(localStorage.getItem('user')).id
-        }, {headers: headers()})
-        .then((response)=> console.log(response.data))
-        dispatch({ type: 'UPDATE_GROUP_CARD', payload: { title, description } });
+        };
+
+        updateCard(card).then( dispatch({ type: 'UPDATE_GROUP_CARD', payload: { header, description } }) );
     }
 
     const handleDelete = () => {
-        api
-        .delete("/api/tarefa/"+state.current.id, {headers: headers()})
-        .then(dispatch({type: 'DELETE_GROUP_CARD'}))
+        deleteCard(state.current.id).then(dispatch({type: 'DELETE_GROUP_CARD'}));
     }
 
 
@@ -55,7 +65,7 @@ const ModalContent = React.memo((props) => {
                 <Form.Control onChange={event => setTitle(event.target.value)}
                     type="text"
                     name='title'
-                    value={title}
+                    value={header}
                     required
                     placeholder="exemplo: Task 1"
                 />
@@ -72,10 +82,12 @@ const ModalContent = React.memo((props) => {
                     placeholder='exemplo: Reunião com o DR. Paulo no dia 10/08'
                 />
             </Form.Group>
+            {loading ? (<Spinner animation="border"/>) : null}
+            {!loading ? (<Historic historyList={historyList.filter(Element => Element.card.id === cardID)}/>) : null}
         </Modal.Body>
         <Modal.Footer>
             <Button variant="secondary" style={{ background: '#FF0000' }} onClick={handleDelete}>
-                Deletar
+                Deletar 
             </Button>
             <Button id='buttonNewCard' variant="primary" type='submit'>
                 Salvar
