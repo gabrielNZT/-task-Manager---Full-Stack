@@ -2,8 +2,7 @@ import React, { useRef, useContext } from 'react';
 import { useDrag, useDrop } from 'react-dnd';
 
 import DragContext from '../../contexts/dragContext';
-import api from '../../service/api';
-import headers from '../../service/security/header';
+import { moveCard } from '../../service/requests.js';
 
 import { Container } from './styles';
 
@@ -56,17 +55,14 @@ const GroupCard = (props) => {
             item.parentOrder = targetListIndex;
         },
         drop (item, monitor) {
-            api
-            .put("/api/moveCard/"+card.id, {
-                header: card.header,
-                description: card.description,
+            const tarefa = {
+                id: card.id,
+                header: item.header,
+                description: item.description,
                 position: item.position,
-                grupo: parent.id
-            }, {headers: headers()})
-            .then()
-            .catch(function (error) {
-                console.log(error)
-            })
+                group: parent.id
+            }
+            moveCard(tarefa);
         }
     })
 

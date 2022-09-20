@@ -2,9 +2,8 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import "../styles/style.css"
 import { useRef, useState, useEffect } from 'react'
-import api from '../../../service/api'
+import { login } from '../../../service/requests.js'
 import toast, { Toaster } from 'react-hot-toast';
-import { currentUser, logIn } from '../../../service/security/auth.js'
 import { useNavigate } from 'react-router-dom'
 
 
@@ -20,6 +19,15 @@ function LoginForm() {
         localStorage.clear()
     }, []);
 
+    async function validateLogin(user){
+    await login(user);
+    if(localStorage.getItem('auth') !== null){
+        navigate('../dashboard', {replace: true})
+    } else {
+        notify();
+    }
+    }
+
     function handleSubmit ( event ) {
         event.preventDefault();
 
@@ -33,19 +41,7 @@ function LoginForm() {
 
         buttonRef.current.focus();
 
-
-        api
-            .post("/api/login", user)
-            .then(response => {
-                if(response.status === 200){
-                    logIn(response);
-                    currentUser();
-                    navigate('../dashboard', {replace: true})
-                }
-            })
-            .catch(function (error) {
-                notify(error.message)
-            });
+        validateLogin(user);
     }
 
 

@@ -4,34 +4,38 @@ import { DeleteGroupModal, EditGroupCardModal, CreateGroupCardModal, CreateGroup
 import DragContext from '../contexts/dragContext';
 import { reducer } from './reducer';
 import { Container } from "./styles";
-import api from "../service/api"
-import headers from '../service/security/header'
-import { currentUser } from "../service/security/auth.js";
+import { getGroups, currentUser } from "../service/requests.js"
 import { useState } from "react";
 import Spin from '../spin/spinner.js'
-import {openNotification} from '../elements/popup/index.js'
 import AppBar from "./appbar";
+import ModalNotification from "./modal/notification/modal";
+import Notify from './modal/notification/error';
+import { useNavigate } from 'react-router-dom';
 
 const Board = () => {
 
     const [state, dispatch] = useReducer(reducer, { groups: [], status: 'idle' });
     const [loading, setLoading] = useState(false);
+    
+    let navigate = useNavigate()
+
+    function GoToHome(){
+        Notify('INVALIDE_ROUTE');
+        navigate('../dashboard', {replace: true})
+    }
+
+    async function setGroups(){
+        await getGroups().then((response) => {
+            dispatch({ type: 'FETCH_DATA', payload: response.data })
+            setLoading(false)
+        }).catch(GoToHome())
+    }
 
     useEffect(() => {
-        currentUser();
         setLoading(true);
-        api
-            .get("/api/grupo", { headers: headers() })
-            .then((response) => { 
-                dispatch({ type: 'FETCH_DATA', payload: response.data })
-                setLoading(false)
-                if(JSON.parse(localStorage.getItem('user')).receiveEmail){
-                    openNotification()
-                }
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        currentUser()
+        setGroups();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -45,8 +49,9 @@ const Board = () => {
             <CreateGroupCardModal visible={state.modal === 'CREATE_GROUP_CARD'} dispatch={dispatch} state={state} />
             <EditGroupCardModal visible={state.modal === 'EDIT_GROUP_CARD'} dispatch={dispatch} state={state} />
             <DeleteGroupModal visible={state.modal === 'DELETE_GROUP'} dispatch={dispatch} state={state} />
+            <ModalNotification visible={state.modal === 'NOTIFICATION'} dispatch={dispatch} state={state} />
             <DragContext.Provider value={{ list: state.groups, moveItem: moveCardItem }}>
-                <AppBar/>
+                <AppBar state={state} dispatch={dispatch}/>
                 <Container>
                     <GroupList state={state} dispatch={dispatch} />
                     {loading ? (<Spin/>) : null}

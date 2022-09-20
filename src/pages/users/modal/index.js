@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import api from "../../../service/api.js"
+import { postUser } from "../../../service/requests.js"
 import './style.css'
 
 function RegisterModal(props) {
@@ -15,22 +15,15 @@ function RegisterModal(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        
-        api
-        .post("/api/user", {
-            username: user.username,
-            email: user.email,
-            password: user.password,
+        const newUser = {
+            ...user,
             adm: false,
             enabled: true,
             accountExpired: false,
             accountLocked: false,
             passwordExpired: false
-        })
-        .then(response => dispatch({type: 'SUBMIT_USER', payload: response.data}))
-        .catch(function(error) {
-            console.log(error);
-        });
+        }
+        postUser(newUser).then(response => dispatch({type: 'SUBMIT_USER', payload: response.data}));
     }
 
     return (

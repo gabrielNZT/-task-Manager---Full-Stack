@@ -2,12 +2,13 @@ import { Button, Popconfirm, Table, Space, Input } from 'antd';
 import { filter, EditableRow, EditableCell } from './utils/index.js'
 import React, { useEffect, useState, useRef, useReducer } from 'react';
 import AppBar from '../../dashboard/appbar/index.js'
-import api from '../../service/api.js'
-import headers from '../../service/security/header.js'
+import { deleteUser, getUsers, updateUser } from '../../service/requests.js'
 import { SearchOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlight-words';
 import RegisterModal from './modal/index.js';
 import { reducer } from './reducer.js';
+import { useNavigate } from 'react-router-dom';
+import Notify from '../../dashboard/modal/notification/error.js';
 
 const UserList = () => {
   const [state, dispatch] = useReducer (reducer, {users: []});
@@ -15,23 +16,20 @@ const UserList = () => {
   const [searchedColumn, setSearchedColumn] = useState('');
   const searchInput = useRef(null);
 
+  let navigate = useNavigate()
+
+  function GoToHome(){
+    navigate('../', {replace: true});
+    Notify('ACCOUNT_EXIST')
+  }
+
   useEffect(() => {
-    api
-      .get("/api/user", { headers: headers() })
-      .then(response => dispatch({type: 'FETCH_DATA', payload: response.data}))
-      .catch(function(error) {
-        console.log(error);
-      });
+    getUsers().then(response => dispatch({type: 'FETCH_DATA', payload: response.data}))
+    .catch(GoToHome())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleDelete = (record) => {
-    api
-      .delete("/api/user/" + record.id, { headers: headers() })
-      .then(dispatch({type: 'DELETE_USER', payload: record}))
-      .catch(function (error) {
-        console.log(error)
-      })
-  };
+  const handleDelete = (record) => deleteUser(record.id).then(dispatch({type: 'DELETE_USER', payload: record}));
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -175,19 +173,7 @@ const UserList = () => {
     },
   ];
 
-  const handleSave = (row) => {
-    api
-    .put("/api/user/"+row.id, {
-      username: row.username,
-      email: row.email,
-      adm: row.adm,
-      enabled: row.enabled
-    }, {headers: headers()})
-    .then(dispatch({type: 'UPDATE_USER', payload: row}))
-    .catch(function (error) {
-      console.log(error);
-    })
-  };
+  const handleSave = (row) => updateUser(row).then(dispatch({type: 'UPDATE_USER', payload: row}));
 
   const components = {
     body: {

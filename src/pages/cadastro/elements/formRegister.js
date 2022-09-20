@@ -3,7 +3,8 @@ import Button from 'react-bootstrap/Button';
 import '../styles/style.css';
 import { useRef, useState } from 'react';
 import { message } from 'antd';
-import api from '../../../service/api';
+import { login, postUser } from '../../../service/requests.js';
+import { useNavigate } from 'react-router-dom';
 
 function FormRegister() {
   const [name, setName] = useState('');
@@ -12,8 +13,17 @@ function FormRegister() {
   const [again, setAgain] = useState('');
   const buttonRef = useRef(null);
   const switchRef = useState(null);
+  let navigate = useNavigate();
   
+  const notify = () => message.error("Essa conta já existe")
    
+  async function validateLogin(user){
+   await postUser(user).then(response => response?.status === 201 ? login({username: name, password: password}): null)
+   .catch(notify)
+   if( localStorage.getItem('auth') !== null ){
+    navigate('../dashboard', {replace: true})
+   }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,8 +34,8 @@ function FormRegister() {
       setAgain('');
       
     } else {
-      api
-    .post("/api/user", {
+
+      const user = {
       username: name,
       email: email,
       password: password,
@@ -34,20 +44,10 @@ function FormRegister() {
       accountExpired: false,
       accountLocked: false,
       passwordExpired: false
-    })
-    .then(response => {
-      if(response.status === 201){
-        message.success("Conta Criada com sucesso")
       }
-      else if(response.status === 409){
-        message.error("Conta já em uso")
-      } else {
-        message.error(response.message)
-      }
-    })
-    .catch(function (error) {
-      console.log(error)
-    });
+
+      validateLogin(user);
+      
       buttonRef.current.focus();
     }
   }

@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import api from '../../../service/api';
-import headers from '../../../service/security/header.js';
+import { deleteCard, updateCard, getUserCards } from '../../../service/requests.js';
 import Historic from '../../../elements/historic/index.js';
 import { Spinner } from 'react-bootstrap';
 
@@ -30,36 +29,29 @@ const ModalContent = React.memo((props) => {
     const cardID = state.current !== undefined ? state.current.id : null;
 
     useEffect(() => {
-        
-        api
-        .get("/api/userCard", {headers: headers()})
-        .then(response => {
+
+        getUserCards().then(response => {
             setHistoryList(response.data);
             setLoading(false);
-        })
-        .catch(function (error) {
-            console.log(error)
         })
     }, []);
 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        api
-        .put("/api/tarefa/"+state.current.id, {
+        const card = {
+            id: state.current.id,
             position: state.current.position,
             header: header,
             description: description,
             user: JSON.parse(localStorage.getItem('user')).id
-        }, {headers: headers()})
-        .then();
-        dispatch({ type: 'UPDATE_GROUP_CARD', payload: { header, description } });
+        };
+
+        updateCard(card).then( dispatch({ type: 'UPDATE_GROUP_CARD', payload: { header, description } }) );
     }
 
     const handleDelete = () => {
-        api
-        .delete("/api/tarefa/"+state.current.id, {headers: headers()})
-        .then(dispatch({type: 'DELETE_GROUP_CARD'}))
+        deleteCard(state.current.id).then(dispatch({type: 'DELETE_GROUP_CARD'}));
     }
 
 
