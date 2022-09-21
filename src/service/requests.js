@@ -1,6 +1,7 @@
 import api from './api.js'
 import axios from "axios";
 import { logIn } from "./security/auth";
+import Notify from '../dashboard/modal/notification/error.js';
 
 export const handleReceiveEmail = (userID, receiveEmail) => {
     api
@@ -53,6 +54,9 @@ export const getGroups = () => {
     return api
         .get("/api/grupo")
         .then()
+        .catch(function (error) {
+            console.log(error)
+        })
 }
 
 export const updateGroupTitle = (groupID, newTitle) => {
@@ -86,11 +90,13 @@ export const login = (user) => {
     return axios
         .post("http://localhost:8080/api/login", user)
         .then(response => logIn(response))
+        .catch(() => Notify('LOGIN_ERROR'))
 }
 
-export const getUsers = () => {
+export const getUsers = (tableParams) => {
+    const pagination = tableParams.pagination;
     return api
-        .get("/api/user")
+        .get(`/api/user?current=${pagination.current}&pageSize=${pagination.pageSize}`)
         .then()
 }
 
@@ -132,10 +138,10 @@ export const getUserCards = () => {
         .then()
 }
 
-export async function currentUser () {
+export async function currentUser() {
     const response = await api.get("api/currentUser")
-    if(response.status === 200){
-       localStorage.setItem('user', JSON.stringify(response.data))
+    if (response.status === 200) {
+        localStorage.setItem('user', JSON.stringify(response.data))
     }
     return response.data
 }
