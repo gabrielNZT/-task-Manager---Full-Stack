@@ -11,25 +11,50 @@ import { useNavigate } from 'react-router-dom';
 import Notify from '../../dashboard/modal/notification/error.js';
 
 const UserList = () => {
-  const [state, dispatch] = useReducer (reducer, {users: []});
+  const [state, dispatch] = useReducer(reducer, { users: [] });
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 10,
+    },
+  });
   const searchInput = useRef(null);
 
   let navigate = useNavigate()
 
-  function GoToHome(){
-    navigate('../', {replace: true});
-    Notify('ACCOUNT_EXIST')
+  function GoToHome() {
+    navigate('../', { replace: true });
+    Notify('INVALIDE_ROUTE')
   }
 
   useEffect(() => {
-    getUsers().then(response => dispatch({type: 'FETCH_DATA', payload: response.data}))
-    .catch(GoToHome())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    getUsers(tableParams).then(response => {
+      dispatch({ type: 'FETCH_DATA', payload: response.data.users })
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          total: response.data.totalCount, // 200 is mock data, you should read it from server
+          // total: data.totalCount,
+        },
+      })
+    })
+      .catch(() => GoToHome())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(tableParams)]);
 
-  const handleDelete = (record) => deleteUser(record.id).then(dispatch({type: 'DELETE_USER', payload: record}));
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    setTableParams({
+      pagination,
+      filters,
+      ...sorter,
+    });
+  };
+
+  const handleDelete = (record) => deleteUser(record.id).then(dispatch({ type: 'DELETE_USER', payload: record }));
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -40,6 +65,7 @@ const UserList = () => {
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText('');
+    setSearchedColumn('')
   };
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -104,7 +130,7 @@ const UserList = () => {
         }}
       />
     ),
-    onFilter: (value, record) => 
+    onFilter: (value, record) =>
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
@@ -173,7 +199,7 @@ const UserList = () => {
     },
   ];
 
-  const handleSave = (row) => updateUser(row).then(dispatch({type: 'UPDATE_USER', payload: row}));
+  const handleSave = (row) => updateUser(row).then(dispatch({ type: 'UPDATE_USER', payload: row }));
 
   const components = {
     body: {
@@ -202,12 +228,15 @@ const UserList = () => {
       <AppBar />
       <Table
         components={components}
+        rowKey={(record) => record.id}
         rowClassName={() => 'editable-row'}
+        pagination={tableParams.pagination}
+        onChange={handleTableChange}
         bordered
         dataSource={state.users}
         columns={columns}
       />
-      <RegisterModal dispatch={dispatch}/>
+      <RegisterModal dispatch={dispatch} />
     </div>
   );
 };
