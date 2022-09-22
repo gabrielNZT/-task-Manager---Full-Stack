@@ -60,6 +60,7 @@ function RegisterModal(props) {
                         <Form.Group className="mb-3" controlId="username-input">
                             <Form.Label>Username</Form.Label>
                             <Form.Control
+                                required
                                 onChange={event => setUser({...user, username: event.target.value})}
                                 type="text"
                                 placeholder="roberto"
@@ -68,6 +69,7 @@ function RegisterModal(props) {
                         <Form.Group className="mb-3" controlId="email-input">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control
+                                required
                                 onChange={event => setUser({...user, email: event.target.value})}
                                 type="email"
                                 placeholder="name@example.com"
@@ -76,6 +78,7 @@ function RegisterModal(props) {
                         <Form.Group className="mb-3" controlId="password-input">
                             <Form.Label>Senha</Form.Label>
                             <Form.Control
+                                required
                                 onChange={event => setUser({...user, password: event.target.value})}
                                 type="password"
                             />

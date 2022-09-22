@@ -52,10 +52,10 @@ const UserList = () => {
 
 
   const handleTableChange = (pagination, filters, sorter) => {
-    console.log()
+    console.log(sorter)
     setTableParams({
       pagination,
-      searchFor: filters,
+      filter: filters,
       sorter: sorter,
     });
   };
