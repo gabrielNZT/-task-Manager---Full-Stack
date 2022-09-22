@@ -95,8 +95,20 @@ export const login = (user) => {
 
 export const getUsers = (tableParams) => {
     const pagination = tableParams.pagination;
+    const sorter = tableParams.sorter
+    const field = sorter.field === undefined? 'username': sorter.field
+    let sort
+    if(sorter.order === 'ascend'){
+        sort = 'asc'
+    }
+    else if(sorter.order === undefined){
+        sort = ''
+    }
+    else {
+        sort = 'desc'
+    }
     return api
-        .get(`/api/user?current=${pagination.current}&pageSize=${pagination.pageSize}`)
+        .get(`/api/user?current=${pagination.current}&pageSize=${pagination.pageSize}&sort=${sort}&field=${field}`)
         .then()
 }
 

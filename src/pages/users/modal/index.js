@@ -6,7 +6,7 @@ import { postUser } from "../../../service/requests.js"
 import './style.css'
 
 function RegisterModal(props) {
-    const {dispatch} = props;
+    const {dispatch, setTableParams, tableParams, state} = props;
     const [show, setShow] = useState(false);
     const [user, setUser] = useState();
 
@@ -23,7 +23,16 @@ function RegisterModal(props) {
             accountLocked: false,
             passwordExpired: false
         }
-        postUser(newUser).then(response => dispatch({type: 'SUBMIT_USER', payload: response.data}));
+        postUser(newUser).then(response => {
+            setTableParams({
+                ...tableParams,
+                pagination: {
+                    ...tableParams.pagination,
+                    total: state.length + 1
+                }
+            })
+            dispatch({type: 'SUBMIT_USER', payload: response.data})
+        });
     }
 
     return (

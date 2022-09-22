@@ -19,7 +19,13 @@ const UserList = () => {
       current: 1,
       pageSize: 10,
     },
+    sorter: {
+      order: 'ascend',
+      field: 'username'
+    }
   });
+
+
   const searchInput = useRef(null);
 
   let navigate = useNavigate()
@@ -36,8 +42,7 @@ const UserList = () => {
         ...tableParams,
         pagination: {
           ...tableParams.pagination,
-          total: response.data.totalCount, // 200 is mock data, you should read it from server
-          // total: data.totalCount,
+          total: response.data.totalCount,
         },
       })
     })
@@ -47,14 +52,24 @@ const UserList = () => {
 
 
   const handleTableChange = (pagination, filters, sorter) => {
+    console.log()
     setTableParams({
       pagination,
-      filters,
-      ...sorter,
+      searchFor: filters,
+      sorter: sorter,
     });
   };
 
-  const handleDelete = (record) => deleteUser(record.id).then(dispatch({ type: 'DELETE_USER', payload: record }));
+  const handleDelete = (record) => deleteUser(record.id).then(() => {
+    dispatch({ type: 'DELETE_USER', payload: record })
+    setTableParams({
+      ...tableParams,
+      pagination: {
+        ...tableParams.pagination,
+        total: state.length - 1
+      }
+    })
+  });
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -160,7 +175,7 @@ const UserList = () => {
       width: '30%',
       editable: true,
       ...getColumnSearchProps('username'),
-      sorter: (a, b) => a.username.localeCompare(b.username),
+      sorter: () => {},
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -185,7 +200,7 @@ const UserList = () => {
       dataIndex: 'email',
       editable: true,
       ...getColumnSearchProps('email'),
-      sorter: (a, b) => a.username.localeCompare(b.username),
+      sorter: () => {},
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -236,7 +251,7 @@ const UserList = () => {
         dataSource={state.users}
         columns={columns}
       />
-      <RegisterModal dispatch={dispatch} />
+      <RegisterModal state={state} tableParams={tableParams} setTableParams={setTableParams} dispatch={dispatch} />
     </div>
   );
 };
