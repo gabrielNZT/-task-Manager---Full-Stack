@@ -3,32 +3,28 @@ import Button from 'react-bootstrap/Button'
 import "../styles/style.css"
 import { useRef, useState, useEffect } from 'react'
 import { login } from '../../../service/requests.js'
-import toast, { Toaster } from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom'
-
 
 function LoginForm() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const buttonRef = useRef(null)
 
-    const notify = () => toast.error("senha ou usuario inválido")
     let navigate = useNavigate();
 
     useEffect(() => {
         localStorage.clear()
     }, []);
 
-    async function validateLogin(user){
-    await login(user);
-    if(localStorage.getItem('auth') !== null){
-        navigate('../dashboard', {replace: true})
-    } else {
-        notify();
-    }
+    async function validateLogin(user) {
+        await login(user);
+        if (localStorage.getItem('auth') !== null) {
+            navigate('../dashboard', { replace: true })
+        }
     }
 
-    function handleSubmit ( event ) {
+    function handleSubmit(event) {
         event.preventDefault();
 
         var user = {

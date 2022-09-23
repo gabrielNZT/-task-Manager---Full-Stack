@@ -16,26 +16,26 @@ const Board = () => {
 
     const [state, dispatch] = useReducer(reducer, { groups: [], status: 'idle' });
     const [loading, setLoading] = useState(false);
-    
+
     let navigate = useNavigate()
 
-    function GoToHome(){
+    function GoToHome() {
         Notify('INVALIDE_ROUTE');
-        navigate('../dashboard', {replace: true})
+        navigate('../', { replace: true })
     }
 
-    async function setGroups(){
+    async function setGroups() {
         await getGroups().then((response) => {
             dispatch({ type: 'FETCH_DATA', payload: response.data })
             setLoading(false)
-        }).catch(GoToHome())
+        }).catch(() => GoToHome())
     }
 
     useEffect(() => {
         setLoading(true);
         currentUser()
         setGroups();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
@@ -51,10 +51,10 @@ const Board = () => {
             <DeleteGroupModal visible={state.modal === 'DELETE_GROUP'} dispatch={dispatch} state={state} />
             <ModalNotification visible={state.modal === 'NOTIFICATION'} dispatch={dispatch} state={state} />
             <DragContext.Provider value={{ list: state.groups, moveItem: moveCardItem }}>
-                <AppBar state={state} dispatch={dispatch}/>
+                <AppBar state={state} dispatch={dispatch} />
                 <Container>
                     <GroupList state={state} dispatch={dispatch} />
-                    {loading ? (<Spin/>) : null}
+                    {loading ? (<Spin />) : null}
                 </Container>
             </DragContext.Provider>
 

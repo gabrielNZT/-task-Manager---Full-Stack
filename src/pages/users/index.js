@@ -11,25 +11,65 @@ import { useNavigate } from 'react-router-dom';
 import Notify from '../../dashboard/modal/notification/error.js';
 
 const UserList = () => {
-  const [state, dispatch] = useReducer (reducer, {users: []});
+  const [state, dispatch] = useReducer(reducer, { users: [] });
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 10,
+    },
+    sorter: {
+      order: 'ascend',
+      field: 'username'
+    }
+  });
+
+
   const searchInput = useRef(null);
 
   let navigate = useNavigate()
 
-  function GoToHome(){
-    navigate('../', {replace: true});
-    Notify('ACCOUNT_EXIST')
+  function GoToHome() {
+    navigate('../', { replace: true });
+    Notify('INVALIDE_ROUTE')
   }
 
   useEffect(() => {
-    getUsers().then(response => dispatch({type: 'FETCH_DATA', payload: response.data}))
-    .catch(GoToHome())
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    getUsers(tableParams).then(response => {
+      dispatch({ type: 'FETCH_DATA', payload: response.data.users })
+      setTableParams({
+        ...tableParams,
+        pagination: {
+          ...tableParams.pagination,
+          total: response.data.totalCount,
+        },
+      })
+    })
+      .catch(() => GoToHome())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [JSON.stringify(tableParams)]);
 
-  const handleDelete = (record) => deleteUser(record.id).then(dispatch({type: 'DELETE_USER', payload: record}));
+
+  const handleTableChange = (pagination, filters, sorter) => {
+    console.log(sorter)
+    setTableParams({
+      pagination,
+      filter: filters,
+      sorter: sorter,
+    });
+  };
+
+  const handleDelete = (record) => deleteUser(record.id).then(() => {
+    dispatch({ type: 'DELETE_USER', payload: record })
+    setTableParams({
+      ...tableParams,
+      pagination: {
+        ...tableParams.pagination,
+        total: state.length - 1
+      }
+    })
+  });
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -40,6 +80,7 @@ const UserList = () => {
   const handleReset = (clearFilters) => {
     clearFilters();
     setSearchText('');
+    setSearchedColumn('')
   };
 
   const getColumnSearchProps = (dataIndex) => ({
@@ -104,7 +145,7 @@ const UserList = () => {
         }}
       />
     ),
-    onFilter: (value, record) => 
+    onFilter: (value, record) =>
       record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
@@ -134,7 +175,7 @@ const UserList = () => {
       width: '30%',
       editable: true,
       ...getColumnSearchProps('username'),
-      sorter: (a, b) => a.username.localeCompare(b.username),
+      sorter: () => {},
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -159,7 +200,7 @@ const UserList = () => {
       dataIndex: 'email',
       editable: true,
       ...getColumnSearchProps('email'),
-      sorter: (a, b) => a.username.localeCompare(b.username),
+      sorter: () => {},
       sortDirections: ['descend', 'ascend'],
     },
     {
@@ -173,7 +214,7 @@ const UserList = () => {
     },
   ];
 
-  const handleSave = (row) => updateUser(row).then(dispatch({type: 'UPDATE_USER', payload: row}));
+  const handleSave = (row) => updateUser(row).then(dispatch({ type: 'UPDATE_USER', payload: row }));
 
   const components = {
     body: {
@@ -202,12 +243,15 @@ const UserList = () => {
       <AppBar />
       <Table
         components={components}
+        rowKey={(record) => record.id}
         rowClassName={() => 'editable-row'}
+        pagination={tableParams.pagination}
+        onChange={handleTableChange}
         bordered
         dataSource={state.users}
         columns={columns}
       />
-      <RegisterModal dispatch={dispatch}/>
+      <RegisterModal state={state} tableParams={tableParams} setTableParams={setTableParams} dispatch={dispatch} />
     </div>
   );
 };

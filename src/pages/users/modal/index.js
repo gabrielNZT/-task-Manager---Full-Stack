@@ -6,7 +6,7 @@ import { postUser } from "../../../service/requests.js"
 import './style.css'
 
 function RegisterModal(props) {
-    const {dispatch} = props;
+    const {dispatch, setTableParams, tableParams, state} = props;
     const [show, setShow] = useState(false);
     const [user, setUser] = useState();
 
@@ -23,7 +23,16 @@ function RegisterModal(props) {
             accountLocked: false,
             passwordExpired: false
         }
-        postUser(newUser).then(response => dispatch({type: 'SUBMIT_USER', payload: response.data}));
+        postUser(newUser).then(response => {
+            setTableParams({
+                ...tableParams,
+                pagination: {
+                    ...tableParams.pagination,
+                    total: state.length + 1
+                }
+            })
+            dispatch({type: 'SUBMIT_USER', payload: response.data})
+        });
     }
 
     return (
@@ -51,6 +60,7 @@ function RegisterModal(props) {
                         <Form.Group className="mb-3" controlId="username-input">
                             <Form.Label>Username</Form.Label>
                             <Form.Control
+                                required
                                 onChange={event => setUser({...user, username: event.target.value})}
                                 type="text"
                                 placeholder="roberto"
@@ -59,6 +69,7 @@ function RegisterModal(props) {
                         <Form.Group className="mb-3" controlId="email-input">
                             <Form.Label>Email address</Form.Label>
                             <Form.Control
+                                required
                                 onChange={event => setUser({...user, email: event.target.value})}
                                 type="email"
                                 placeholder="name@example.com"
@@ -67,6 +78,7 @@ function RegisterModal(props) {
                         <Form.Group className="mb-3" controlId="password-input">
                             <Form.Label>Senha</Form.Label>
                             <Form.Control
+                                required
                                 onChange={event => setUser({...user, password: event.target.value})}
                                 type="password"
                             />
